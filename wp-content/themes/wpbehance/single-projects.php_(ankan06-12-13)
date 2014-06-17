@@ -1,0 +1,198 @@
+<?php
+/**
+ * The template for displaying all single project
+ *
+ 
+ */
+
+get_header();
+global $wpdb;
+
+$post_id = get_the_ID();
+$user_id = get_current_user_id();
+$follower_count = $wpdb->get_results("select * from " . $wpdb->prefix . "followers where post_id='".$post_id."'");
+$follower_query = $wpdb->get_row("select * from " . $wpdb->prefix . "followers where post_id='".$post_id."' and user_id = '".$user_id."'");
+
+$like_count = $wpdb->get_results("select * from " . $wpdb->prefix . "like where post_id='".$post_id."'");
+$like_query = $wpdb->get_row("select * from " . $wpdb->prefix . "like where post_id='".$post_id."' and user_id = '".$user_id."'");
+
+$project_viewer_count = (get_post_meta($post_id, "project_viewer", 'single')+1);
+update_post_meta($post_id, "project_viewer", $project_viewer_count);
+$project_viewer = get_post_meta($post_id, "project_viewer", 'single');
+?>
+<?php wp_nonce_field( 'followers', 'security' ); ?>
+<input type="hidden" name="hdnPath" id="hdnPath" value="<?php echo FOLLOWERS_PLUGIN_URL; ?>" />
+<input type="hidden" name="hdnPostId" id="hdnPostId" value="<?php echo $post_id; ?>" />
+<input type="hidden" name="hdnUserId" id="hdnUserId" value="<?php echo $user_id; ?>" />
+<div class="mid_wrapper">
+    <div class="main_wrap">
+        <?php while ( have_posts() ) : the_post(); 
+                $project_id= get_the_ID();
+           ?>
+        	<div class="no_left_box_mid">
+            	<div class="box_left"></div>
+                <div class="box_right"></div>
+                <div class="port_feature">
+                	<h1 class="potfolio_title"><?php the_title(); ?></h1>
+                	<div class="potfolio_featurearea">
+                            <div class="potfolio_feat_text">
+                                <div class="trimed_content">
+                                <?php 
+                            $content=content_limit(72,  get_the_content());
+                            echo $content[0];
+                            if($content[1]!="")
+                                echo " <span class='open_read_more'> Read More ...</span>";
+                            ?>
+                                </div>
+                                
+                                <?php
+                                if($content[1]!=""){
+                                ?>
+                                <div class="left_trimed_content" style="display: none;"><?php echo $content[1] ?></div>
+                                <?php } ?>
+                                </div>
+			
+			
+                        <div class="clear"></div> 
+                    </div> 
+                    <div class="potfolio_rightarea">
+                    	<div class="follow_area">
+                        	<div class="port_area">
+                                    <div class="port_text"><img src="<?php bloginfo('template_url') ?>/images/follow_icon.png"/>Project Views</div><div class="port_count"><?php echo $project_viewer; ?></div>
+                            </div>
+                            <div class="port_area">
+                        		<div class="port_text"><img src="<?php bloginfo('template_url') ?>/images/follow_icon2.png"/>Project Comments</div><div class="port_count"><?php comments_number(); ?></div>
+                            </div>
+                            <div class="port_area_last">
+                        		<div class="port_text"><img src="<?php bloginfo('template_url') ?>/images/follow_icon3.png"/>Project Followers</div><div class="port_count" id="follow_count"><?php echo count($follower_count); ?></div>
+                                
+                            </div>
+                       <div class="clear"></div>      
+                        </div>
+						<?php if($user_id){ ?>
+                        <div class="potfolio_follow">
+                        <a href="#"><div id="unfollowLink" <?php if(!$follower_query){ ?>style="display:none;"<?php } ?>><img src="<?php echo home_url(); ?>/wp-content/plugins/followers/images/following.png" alt="img" id="followingImg"/></div></a>
+                        
+                        <a href="#"><div id="followLink" <?php if($follower_query){ ?>style="display:none;" <?php } ?>><img src="<?php echo home_url(); ?>/wp-content/plugins/followers/images/follow.png" alt="img" id="followImg"/></div></a>
+                        
+                        <!--<img src="<?php echo home_url(); ?>/wp-content/plugins/followers/images/following.png" alt="img" id="followingImg"/><a href="#" id="followLink" <?php if($follower_query){ ?>style="display:none;" <?php } ?>><img src="<?php echo home_url(); ?>/wp-content/plugins/followers/images/follow.png" alt="img" id="followImg"/></a>-->
+                        
+                        <img src="<?php echo home_url(); ?>/wp-content/plugins/followers/images/loading.gif" alt="loading" id="loadingImg"	style="display:none; margin-top:4px;"/>
+                        <div class="clear"></div> 
+                        </div>
+                        <?php } ?>
+<!--<a href="http://www.facebook.com/sharer.php?s=100&p[title]='+encodeURIComponent('this is a title') + '&p[summary]=' + encodeURIComponent('description here') + '&p[url]=' + encodeURIComponent('http://stagingpc.com/wpbehance') + '&p[images][0]=' + encodeURIComponent('http://stagingpc.com/wpbehance/wp-content/uploads/2013/12/20130813_085850-202x151.jpg')" title="Facebook share button" target="blank">-->
+
+
+                            <div class="social_area">
+                     <!--     <a href="http://www.facebook.com/sharer.php?u=<?php the_permalink();?>&t=<?php the_title(); ?>" title="Facebook share button" target="blank"><img src="<?php bloginfo('template_url') ?>/images/facebook.png" alt="img" /></a>-->
+<?php //$desc = substr(get_the_content(),200); 
+$images = get_children(array('post_parent' => get_the_ID(), 'post_type' => 'attachment', 'order' => 'DESC', 'numberposts' => -1, 'post_mime_type' => 'image',));
+$i = 0;
+foreach ($images as $image) { $i++;
+if($i==1)
+$attachment = wp_get_attachment_image_src($image->ID, "thumbnail");
+}
+?>
+<script language="javascript">
+function open_window(url)
+{
+window.open(url, 'Facebook Share', 'status = 1, height = 500, width = 900, resizable = 0' )
+}
+</script>
+
+
+<a href="https://www.facebook.com/dialog/feed?app_id=1440128186206541&link=<?php the_permalink();?>&picture=<?php echo $attachment[0];?>&name=Behance+Copy&caption=<?php the_title(); ?>&description=<?php $content; ?>&redirect_uri=<?php the_permalink(); ?>"><img src="<?php bloginfo('template_url') ?>/images/facebook.png" alt="img" /></a>
+
+			  <a href="https://twitter.com/share?url=<?php the_permalink(); ?>&text=<?php the_title(); ?>&media=<?php echo $attachment[0];?>"><img src="<?php bloginfo('template_url') ?>/images/twitter.png" alt="img" /></a>
+
+<a href="https://plus.google.com/share?url={<?php the_permalink(); ?>}"><img src="<?php bloginfo('template_url') ?>/images/google+.png" alt="img" /></a>
+
+			  <!--<a href="#"><img src="<?php bloginfo('template_url') ?>/images/google+.png" alt="img" /></a>-->
+
+                      </div>
+            
+						<?php if($user_id){ ?>
+                        <div class="like_area">
+                        <a href="#" id="likeBtn" class="like" <?php if($like_query){ ?>style="display:none;"<?php } ?>>Like</a>
+                        <a href="#" id="dislikeBtn" class="dislike" <?php if(!$like_query){ ?>style="display:none;" <?php } ?>>DisLike</a>
+                        </div>
+                        <?php } ?>
+
+
+
+
+                        
+                   
+                <div class="clear"></div> 
+                </div>
+                
+                
+                <div class="clear"></div> 
+                
+                <?php if(has_post_thumbnail( $project_id )){
+          
+         $src = wp_get_attachment_image_src( get_post_thumbnail_id($project_id), 'cover');
+           
+           
+         
+      
+      ?>
+                <div class="portfolio_banner"><img src="<?php echo $src[0]; ?>" alt="img" /></div>
+                
+                <?php } ?>
+                <div class="project_details_image_section">
+                    
+                    <?php
+                        
+                         $resault= $wpdb->get_results( 
+            $wpdb->prepare( 
+                  "
+                  SELECT pi.* FROM ".$wpdb->prefix."portfolio_images pi, ".$wpdb->prefix."posts p
+                   WHERE p.ID=pi.image_id AND portfolio_id=%d ORDER BY pi.order_pos ASC
+                  ",$project_id ));
+                         
+                         //var_dump($resault);
+                         if(count($resault)){
+                             foreach($resault as $res){
+                          ?>
+                    
+                    
+                    
+                	<div class="project-cover">
+  <div class="cover-img"><div class="potfolio_area">Features</div>
+      <?php
+      $src = wp_get_attachment_image_src($res->image_id , 'full');
+      ?>
+      <a class="cover-img-link group1" href="<?php echo $src[0]; ?>" title="<?php echo get_post_field('post_excerpt', $res->image_id) ?>">
+         <?php echo remove_width_and_height_attribute(wp_get_attachment_image( $res->image_id, 'thumbnail' )); ?>
+      </a></div>
+  <div class="cover-info-stats">
+    <div class="cover-info">
+         <div class="portfolio_name">
+        <?php if(get_post_field('post_excerpt', $res->image_id)!="") { ?>
+      <a class="projectName portfolio_name-link" ><?php echo get_post_field('post_excerpt', $res->image_id) ?></a> 
+        <?php } ?>
+      </div>
+    </div>
+    
+    <div class="cover-stat-fields-wrap">
+      
+    </div>
+  </div>
+</div>
+					
+                         <?php } 
+                         }
+                         ?>
+                    
+                <div class="clear"></div>
+                </div>
+
+            </div>
+	<?php comments_template(); ?>
+       <?php endwhile; ?>
+    <div class="clear"></div>
+    </div>
+</div>
+<?php get_footer(); ?>

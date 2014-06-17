@@ -1,0 +1,31 @@
+ /**
+ * CodeNegar wordPress AJAX AutoSuggest scripts
+ *
+ * @package    	Wordpress Ajax AutoSuggest
+ * @license     http://codecanyon.net/licenses
+ * @link		http://codenegar.com/ajax-autosuggest/
+ * @version    	1.8
+ */
+label {
+	width: 200px;
+	float: left;
+	margin-right: 1em;
+}
+.postbox .hndle {
+	cursor: pointer !important;
+}
+.post-types-container {
+	width: 215px;
+	height: 100px;
+	overflow-y: scroll;
+	line-height: 170%;
+}
+.padleft {
+	padding-left: 10px;
+}
+.post-types-container{
+	padding: 4px;
+}
+#poststuff{
+	line-height: 200%;
+}
