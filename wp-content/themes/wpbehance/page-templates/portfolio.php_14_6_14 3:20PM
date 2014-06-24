@@ -12,7 +12,7 @@ get_header();
        //$meta_key= get_user_meta($user_id, $key, $single);
        //query_posts('author='.$user_id.', post_type=projects');
        
-       $draft_project=array('lang' => ICL_LANGUAGE_CODE, 'post_type' => 'projects', 'author' => $user_id);
+       $draft_project=array('lang' => ICL_LANGUAGE_CODE, 'post_type' => 'projects', 'author' => $user_id , 'post_status'=>'draft');
        $draft_objs =  get_posts($draft_project);
        if(count($draft_objs)){
 ?>           
@@ -76,9 +76,7 @@ get_header();
         	<span class="stat-label"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/viewer.png" /></span>
             <span class="stat-value">12480</span>
         </span>
-
       </div>
-
     </div>
   </div>
   
@@ -116,15 +114,16 @@ get_header();
                 <div>
                 <?php
                
-                $publish_draft_project=array('lang' => ICL_LANGUAGE_CODE, 'post_type' => 'projects', 'author' => $user_id ,'nopaging'   => true,'post_status' => array('publish','draft', 'auto-draft'));
+                $publish_project=array('lang' => ICL_LANGUAGE_CODE, 'post_type' => 'projects', 'author' => $user_id , 'post_status'=>'publish', 'nopaging'   => true);
                 
                // $n=array('lang' => ICL_LANGUAGE_CODE,'post_type' => 'projects', 'post_status'=>'publish');
-                $publish_draft_project_query = new WP_Query( $publish_draft_project );
+                $publish_project_query = new WP_Query( $publish_project );
 
                 
-                $publish_draft_project_objs =  $publish_draft_project_query->posts;
+                $publish_project_objs =  $publish_project_query->posts;
                 //echo "<pre>";
-                if(count($publish_draft_project_objs)){
+               // var_dump($publish_project_objs);
+                if(count($publish_project_objs)){
                     ?>
                     <div class="create_project_toolbar" align="center">
 
@@ -133,29 +132,21 @@ get_header();
                     
                     
                     <?php
-                    foreach($publish_draft_project_objs as $project) { 
+                    foreach($publish_project_objs as $project) { 
                         //$GLOBALS['project']=$project_ob;
                         ?>
                     <div  id="project_cover<?php echo $project->ID; ?>" class="project_cover_hover_action">
-                      <span class = "project_status_label"><?php if ($project->post_status=='publish'){echo "Published";}else{echo "Saved";} ?></span>
                        <?php get_template_part("content", "project"); ?>
-
+ 
+  
                         <div class="project_ediotor_menu_bar">
                          <ul>
                       <li>
                           <a href="<?php echo get_permalink(get_ID('editor'))."?project_id=".$project->ID; ?>">Edit Project</a>
                       </li>
-                      <?php if ($project->post_status=='publish'){
-                        ?>
-                       <li>
+                      <li>
                           <a href="#" onclick='jQuery.UnpublishProject(event,"<?php echo $project->ID; ?>","<?php echo get_the_title($project->ID); ?>")'>Unpublish Project</a>
                       </li>
-                        <?}else{?>
-                       <li>
-                          <a href="#" onclick='jQuery.publishProject(event,"<?php echo $project->ID; ?>","<?php echo get_the_title($project->ID); ?>")'>Publish Project</a>
-                      </li>
-                        <?} ?>
-                     
                       <li>
                           <a href="<?php echo get_permalink($project->ID); ?>">View Project</a>
                       </li>
@@ -172,7 +163,6 @@ get_header();
                     
                 }else
                 echo do_shortcode('[my_project_list]');
-
                 ?>
                     
                 <div class="clear"></div>

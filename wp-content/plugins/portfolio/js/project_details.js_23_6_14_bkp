@@ -12,7 +12,7 @@ jQuery(function($){
            });
      }; */
 
-/*
+
 
 	$(document).on("click",".filter_tags li a", function(event){
 		//event.preventDefault();
@@ -29,7 +29,7 @@ jQuery(function($){
 		   $(".group1").colorbox({maxWidth:'95%', maxHeight:'95%'});
 	   });
 	
-	});*/
+	});
 
 	$(document).on("click",".add_to_my_wishlist  a", function(event){
 	  event.preventDefault();
@@ -132,17 +132,6 @@ jQuery(function($){
 	    var prj_id = $(this).attr("project_id");
 	    console.log(img_id+'-'+prj_id);
 	});*/
-/*Several Address Starts*/
-$(document).on("click",".several_address", function(event){
-var response = $('.main-div-several-address').html();
-//$('.main-div-several-address').css('display','block');
-console.log(response);
-var popup_length = $('several_address_param').length;
-console.log(popup_length);
-var max_height = 240 * popup_length;
-$.colorbox({title:'Response',width:'700',height:max_height,html:response});
-});
-/*Several Address Ends*/
 var locations = [];
 var loopcounter = $(".map-hidden").length;
 $(".map-hidden").each(function(index, value) { 
@@ -152,12 +141,9 @@ $(".map-hidden").each(function(index, value) {
 });
 var register_lat = $('.reg_geolocation').attr('data-lat');
 var register_long = $('.reg_geolocation').attr('data-long');
-//console.log(register_lat+"/"+register_long);
-console.log(locations);
-function initializeMap()
-{
-
-	var map = new google.maps.Map(document.getElementById('map'), {
+console.log(register_lat+"/"+register_long);
+//console.log(locations);
+var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 10,
                     center: new google.maps.LatLng(register_lat, register_long),
                     mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -184,40 +170,6 @@ function initializeMap()
                   }
 
 
-}
-/*Function Map Loading For Ipad*/
-function initializeIpadMap()
-{
-
-	var map = new google.maps.Map(document.getElementById('mapIpad'), {
-                    zoom: 10,
-                    center: new google.maps.LatLng(register_lat, register_long),
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                  });
-
-                  var infowindow = new google.maps.InfoWindow();
-
-                  var marker, i;
-
-                  for (i = 0; i < locations.length; i++) {  
-                    marker = new google.maps.Marker({
-                      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                          draggable:true,
-    					  animation: google.maps.Animation.DROP,
-                      map: map
-                    });
-
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                      return function() {
-                        infowindow.setContent(locations[i][0]);
-                        infowindow.open(map, marker);
-                      }
-                    })(marker, i));
-                  }
-
-
-}
-/*Function Map Loading For Ipad*/
 
 function toggleBounce() {
 
@@ -229,59 +181,14 @@ function toggleBounce() {
 }
 /*Map Ends*/
 					
-/*Map Shows As Popup In Ipad Landscape */
-
-	/*var deviceAgent = navigator.userAgent.toLowerCase();
-	//$('.main-div-several-address').append("<span>"+deviceAgent+"</span>");
-	console.log(deviceAgent);
-    var agentID = deviceAgent.match(/(iphone|ipod|ipad)/);
-    if (agentID) 
-    {
-    //  alert("mvndkj");
-    var response_map = $(".porfolio_map").html();
-      $.colorbox({title:'Response',width:'700',height:max_height,html:response_map});
-          	$('.main-div-several-address').append("<span>Mobile</span>");
-
-    }
-    else
-    {
-    	$('.main-div-several-address').append("<span>PC</span>");
-    }*/
-
-
-    var isiPad = /ipad/i.test(navigator.userAgent.toLowerCase());
-		if (isiPad)
-		{
-			
-			$('.porfolio_map').css('display','none');
-			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>Click To View Map</span></a>");
-			$(document).on("click",".view_map", function(event){
-		      
-		      $('.porfolio_map_ipad').css('display','block');
-		     // $('.view_map').colorbox({open:true, href:'div#mapIpad', inline:true,width:'450',height:'450',onCleanup:function(){
-                   
-		      	  $('.view_map').colorbox({inline:true, scroll:false,width:'350',height:'350', onComplete: function(){
-                   initializeIpadMap();
-                          }
-                      });
-
-
-                    $('.porfolio_map_ipad').css('display','none');
-                     //hides the content div when the lightbox closes
-                /* }});*/
-		    });
-			/* var response_map = $(".map_main").clone();
-     		$.colorbox({title:'Response',width:'700',height:'300',html:response_map}); 
-			$('.main-div-several-address').append("<span>"+response_map+"</span>");*/
-		}
-		else
-		{
-
-		//	$.colorbox({html:'<script src="http://maps.google.com/maps/api/js?sensor=false"></script><div class = "porfolio_map" id="map"></div>',width:'700',height:'250', onComplete: function() {
-         initializeMap();
-
-		}
-/*Map Shows As Popup In Ipad Landscape Ends*/
+/*Several Address Starts*/
+$(document).on("click",".several_address", function(event){
+var response = $('.main-div-several-address').html();
+//$('.main-div-several-address').css('display','block');
+console.log(response);
+$.colorbox({title:'Response',width:'700px',height:'500px',html:response});
+});
+/*Several Address Ends*/
 });	
 
 

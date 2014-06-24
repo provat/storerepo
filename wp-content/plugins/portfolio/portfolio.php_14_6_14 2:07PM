@@ -37,7 +37,7 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
 
     if (is_user_logged_in() ) {
     wp_register_script('jquery_ui_core',$plugins_url."/js/jquery-ui-core.js");
-   
+    
    
     wp_register_script( "project_action",$plugins_url.'/js/project_action.js');
     
@@ -59,7 +59,7 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
     wp_enqueue_style( 'choosen_dropdown_css',$plugins_url.'/css/chosen.css' ); 
     wp_enqueue_style( 'tag_it_css',$plugins_url.'/css/jquery.tagit.css' ); 
     wp_enqueue_style( 'tag_it_css_jq',$plugins_url.'/css/tagit.ui-zendesk.css' ); 
-    wp_enqueue_style( 'jquery-ui',$plugins_url.'/css/jquery-ui.css' ); 
+   
 
         wp_enqueue_script( 'wp_ajax_url' );
     
@@ -85,8 +85,6 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
 		wp_enqueue_script('dropdown_config');
 
 		wp_enqueue_script('project_action');
-
-
 	  }
 
    } 

@@ -21,6 +21,7 @@
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title><?php wp_title( '|', true, 'right' ); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
@@ -65,6 +66,33 @@ jQuery(document).ready(function($) {
 
 	});
 </script>
+
+<!---search panel----->
+<script type="text/javascript">
+ var overlayClicked = function(event) {
+	jQuery(event.currentTarget).hide();
+ };
+ var searchFormClicked = function(event) {
+	event.stopPropagation();
+ }; 
+	jQuery(document).ready(function($){
+		jQuery('.search_icon a').click(function(){
+			var html = jQuery('.codenegar_ajax_search_wrapper').html();
+			var overlay = jQuery('<div id="overlay" onclick="overlayClicked(event)"><div onclick="searchFormClicked(event)" class="popupContainer">'+html+'</div></div>');
+			overlay.appendTo(document.body)
+		});
+		
+	});
+
+	jQuery(window).scroll(function () {
+	  if (jQuery(document).scrollTop() == 0) {
+		jQuery('.header_bg1').removeClass('tiny');
+	  } else {
+		jQuery('.header_bg1').addClass('tiny');
+	  }
+	});
+</script>
+<!---search panel----->
 
 <!-- Mobile Menu Script-->
 <!--<script src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery-1.9.min.js"></script>-->
@@ -145,7 +173,13 @@ function FacebookInviteFriends()
 <!-- <div class="header_bg_container"> -->
 <div class="header_bg1">
 	<div class="main_wrap">
-   		 <div class="signin_area">
+   		 	<div class="search_icon" style="display:none;">
+            	<a href="#">
+               		<img src="http://everystore.co/wp-content/themes/wpbehance/images/search-image.png">
+                </a>
+            </div>
+            <div class="logo"><a href="<?php bloginfo('url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/logo.png" alt="logo" /></a></div>
+			<div class="signin_area">
 
         	<ul>
                 <?php if ( is_user_logged_in() ) {
@@ -175,7 +209,11 @@ function FacebookInviteFriends()
 
                     <?php }else{ ?>
                    <li>
-                    <a href="#" class="register-link">Sign Up</a> <?php if ( get_option('ajax_login_register_facebook') && get_option('users_can_register') ) : ?> <?php wp_nonce_field( 'login_submit', 'security_login' ); ?><a class="fb-login" href="#"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/connect_img.jpg" alt="connect img" /></a> <?php endif; ?>
+                    <a href="#" class="register-link">Sign Up</a> <?php if ( get_option('ajax_login_register_facebook') && get_option('users_can_register') ) : ?> <?php wp_nonce_field( 'login_submit', 'security_login' ); ?>
+                        <a class="fb-login" href="#">
+                        	F Connect
+                        </a> 
+					<?php endif; ?>
                     </li>
                     <li><a href="#" class="login-link"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/login_icon.png" alt="login img" />Log In</a></li>
                    <?php } ?>
@@ -183,8 +221,6 @@ function FacebookInviteFriends()
 
             </ul>
         </div>
-            <div class="logo"><a href="<?php bloginfo('url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/logo.png" alt="logo" /></a></div>
-
     <div class="clear"></div>
     </div>
 </div>
@@ -541,3 +577,4 @@ function setSearchMode(val)
 <!--========================Middle Start=====================-->
 <div class="mid_wrapper">
     <div class="main_wrap">
+

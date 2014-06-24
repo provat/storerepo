@@ -7,22 +7,6 @@ jQuery(function($){
         
      }); 
      
-     /*jQuery(".tag-content-trigger").click(function(){
-   	  var tag = jQuery(this).data("tag");
-   	  var pid = jQuery(this).data("pid");
-   	  //jQuery(".project-cover").css({'display' : 'none'});
-   	  //jQuery("#tag-"+tag).css({'display' : 'block'});
-   	  var data = {
-             action: 'get_tag_wise_projects_list',
-             tag: tag,
-             pid: pid            
-         };
-   		$.getJSON( myAjax.ajaxurl, data)
-   	    .done(function(result,statusTxt,xhr) {
-   		   $("#project_details_image_section_id").html(result.img_content);		   
-   	    });
-   	});*/
-     
      // continue project action from top toolbar
      
      $(".project_toolbar #continu_project").click(function(event){
@@ -527,7 +511,6 @@ jQuery(function($){
     //crop cover image script end
    
   var counter = 1;
-   var count_parent;
        $(document).on("click", ".add-more", function(event){
          event.preventDefault();
          counter++;
@@ -546,18 +529,16 @@ jQuery(function($){
           $(".address_dynamic:last .project_city").val('');
           $(".address_dynamic:last .project_zip").val('');
           });
-       //  formation(counter);
+         
       
     $(document).on("click", ".remove-child", function(event){
          event.preventDefault();
          if($(".address_dynamic").length!=1)
-      $(this).parent().parent().remove();
-      counter--;
+        $(".address_dynamic:last").remove();        
      });
 
  // project settings form save
  var counter_field = 1;
-
  $(document).on("click",".button_panel #project_settings_save, .button_panel #publish_project_opt_settings", function(event){
       event.preventDefault();
       counter_field = 1;
@@ -566,7 +547,6 @@ jQuery(function($){
       var project_cats=$(".projects_settings_frms #project_categories").val();
       var project_description=$(".projects_settings_frms #project_description").val();
       var project_title=$("#project_title_hidden_record").val();
-      var project_date = $(".projects_settings_frms #project_date").val();      
      var project_country = '';
      var project_street = '';
      var project_state = '';
@@ -584,9 +564,10 @@ jQuery(function($){
       project_state +=$(".projects_settings_frms #project_state"+counter_field).val()+"|";
       project_city +=$(".projects_settings_frms #project_city"+counter_field).val()+"|";
       project_zip +=$(".projects_settings_frms #project_zip"+counter_field).val()+"|";
-
+     
       counter_field++;
      });  
+      var project_date = $(".projects_settings_frms #project_date").val();
 
       if($(".projects_settings_frms #country_all"+counter_field).attr('checked')) 
       var country_all=$(".projects_settings_frms #country_all"+counter_field).val();

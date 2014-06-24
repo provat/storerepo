@@ -14,6 +14,7 @@ This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
 */
 
+
 @charset "utf-8";
 /* Global CSS Document */
 
@@ -22,7 +23,7 @@ body {
 	margin-top: 0px;
 	margin-right: 0px;
 	margin-bottom: 0px;
-	background: #4485cc;
+	background:url(images/footer_bg.jpg) repeat left top;
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:12px;
 }
@@ -114,12 +115,12 @@ h4 {
 /*=======================Header CSS Properties===================*/
 .logo img{ width:100%;}
 .logo { width:307px; display:block; padding:10px 0 5px; float:left; background: url(images/logo_bg.png) no-repeat center 0%;}
-.header_bg1 {background: #4485cc; min-height:88px; border-top:2px solid #03516e;}
-.header_bg2 { background: #4485cc; min-height:39px; border-bottom:1px solid #0195cc; }
+.header_bg1 {background:#009bd4 url(images/header1_glow.png) no-repeat center bottom; min-height:88px; border-top:2px solid #03516e;}
+.header_bg2 { background:url(images/header_bg2.jpg) repeat left top; min-height:39px; border-bottom:1px solid #0195cc; }
 .header_bg3 { background:#fff url(images/header_bg3.jpg) repeat-x left bottom; min-height:50px; padding-bottom:10px;}
 .signin_area{ height:30px; line-height:30px; padding:0px 10px 0px; float:right; -webkit-border-radius: 0px 0px 6px 6px;-moz-border-radius: 0px 0px 6px 6px;border-radius: 0px 0px 6px 6px;background:#03516e; color:#fff; font-size:12px; font-weight:bold; margin-bottom:5px;}
 .signin_area ul{ padding:0; margin:0;}
-.signin_area ul li{ padding:0px 10px 0px; margin:0; /*float:left;*/ display:inline-block; line-height:30px; background:url(images/login_devider.jpg) no-repeat right 2px;}
+.signin_area ul li{ padding:0px 10px 0px; margin:0; float:left; line-height:30px; background:url(images/login_devider.jpg) no-repeat right 2px;}
 .signin_area ul li img { vertical-align:middle; padding:0 4px;}
 .signin_area ul li:last-child{ background:none;}
 .signin_area ul li a{ text-decoration:none; color:#fff; font-weight:bold;}
@@ -529,13 +530,13 @@ label.error {
 	 border:1px solid #E7E7E7; 
 	 position:absolute; 
 	 color:#000; 
-	 padding:0 10px 10px;
+	 padding:10px;
 	 border-radius: 4px; 
  }
 
 /*27-01-14*/
-.creative_field_content_left { float:left; margin-right:9px; min-height:330px; width:190px; border-right:1px solid #ddd; padding-top: 10px; }
-.creative_field_content_right { float:left; padding-top: 10px; }
+.creative_field_content_left { float:left; margin-right:20px; min-height:330px; width:176px;}
+.creative_field_content_right { float:left; }
 .letter_group {  border:1px solid #d7d7d7;}
 .populer_title{
 	font-family:Arial, Helvetica, sans-serif;
@@ -545,7 +546,7 @@ label.error {
 	text-transform:uppercase;
 	margin-bottom:10px;
 	padding-bottom:5px;
-	/*border-bottom:1px dashed #666;*/
+	border-bottom:1px dashed #666;
 }
 .first_lll { font-family:Arial, Helvetica, sans-serif;
 	font-size:14px;
@@ -564,9 +565,8 @@ label.error {
 
 .creative_field_popup ul { padding:0; margin:0 0 10px;}
 .creative_field_popup ul li{ padding:0; margin:0; list-style:none; /* background: url(images/list_icon.png) no-repeat 0px 10px !important; */ border-bottom:1px dashed hsl(200, 9%, 81%); line-height:22px; padding:3px 3px;}
-
 .creative_field_popup ul li a{ color: #000000; }
-.creative_field_popup ul li a:hover{ color: #4485cc; }
+.creative_field_popup ul li a:hover{ #0242ff !important;}
 
 .worldwide_field { position:relative; float:left;}
 .worldwide_field:hover .worldwide_field_popup { display:block;}
@@ -611,9 +611,6 @@ label.error {
 }
 .project_details_image_section .project-cover { 
 	/* min-height:376px; */
-}
-.project_details_image_section .tag-conttent-box{
-	display: none;
 }
 .potfolio_follow { position:relative; float:left; margin-right:5px;}
 .potfolio_follow a{ float:left;}
@@ -694,7 +691,7 @@ label.error {
 
 	
 /*=======================Footer CSS Properties===================*/
-.footer_wrapper { position:relative; bottom:0; left:0; right:0; width:100%; background: #4485cc;}
+.footer_wrapper { position:fixed; bottom:0; left:0; right:0; width:100%; background:url(images/footer_bg.jpg) repeat left top;}
 .footer_border { border-top:3px solid #009ad3; padding-top:1px; background:#fff; clear:both;}
 .footer_bg { min-height:20px; padding-top:16px;}
 .copy_text { color:#fff; font-size:11px;}
@@ -1569,7 +1566,6 @@ select.goog-te-combo {
 #map-heading-register{float:right;}
 hr{color: #FFFFFF}
 .main-div-several-address{display: none;}
-.several-address-description{float: right;}
+.several-address-description{margin-left: 25px;}
 .several-address-heading{margin-top: 10px;text-align: center;text-decoration: underline;}
-.porfolio_map_ipad,.map_reg{display: none;}
 /*new css added on 17th june*/

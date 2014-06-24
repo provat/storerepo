@@ -18,145 +18,7 @@ $like_query = $wpdb->get_row("select * from " . $wpdb->prefix . "like where post
 $project_viewer_count = (get_post_meta($post_id, "project_viewer", 'single')+1);
 update_post_meta($post_id, "project_viewer", $project_viewer_count);
 $project_viewer = get_post_meta($post_id, "project_viewer", 'single');
-
-$project_multiple = $wpdb->get_results("select * from " . $wpdb->prefix . "project_multiple_address where project_id='".$post_id."'");
-$project_reg_addr = $wpdb->get_results("select * from " . $wpdb->prefix . "project_multiple_address where project_id='".$post_id."' and is_main_address = 'Yes'");
-$project_child_addr = $wpdb->get_results("select * from " . $wpdb->prefix . "project_multiple_address where project_id='".$post_id."' and is_main_address = 'No'");
-
-
-if (function_exists('st_makeEntries')) :
-  add_shortcode('sharethis', 'st_makeEntries');
-endif;
-function make_tag_list($tag_name, $project_id) {
-  global $wpdb;
-  $tag = $tag_name;
-
-  $sql = "SELECT t.term_id,tx.term_taxonomy_id FROM {$wpdb->prefix}terms AS t INNER JOIN {$wpdb->prefix}term_taxonomy ";
-  $sql.= "AS tx ON t.term_id = tx.term_id WHERE t.slug LIKE '$tag' AND tx.taxonomy = 'post_tag'";
-  $term = $wpdb->get_row($sql);
-  $term_taxonomy_id = $term->term_taxonomy_id;
-
-  $obj_sql = "SELECT ob.object_id,pi.* FROM {$wpdb->prefix}term_relationships AS ob RIGHT JOIN {$wpdb->prefix}portfolio_images ";
-  $obj_sql.= "AS pi ON ob.object_id = pi.image_id WHERE ob.term_taxonomy_id = $term_taxonomy_id AND ";
-  $obj_sql.= "ob.object_id != $project_id";
-  $results = $wpdb->get_results($obj_sql);
-
-  $image_content = '';
-
-  if(count($results) > 0){
-    $image_ids  = array();
-
-    foreach($results as $res) {
-      $src = wp_get_attachment_image_src($res->image_id , 'full');
-      if($src[2] > 270) {
-        $height = '270';
-        $cover_img_height = 'auto';
-      } else {
-        $height = $src[2];
-        $cover_img_height = '273px';
-      }
-      if($src[1] > 180)
-        $width = '180';
-      else
-        $width = $src[1];
-
-      $image_ids[] = $res->image_id;
-      $image_content.= '<div class="project-cover" data-ntag="'.$tag.'"><div class="cover-img" style="height:'.$cover_img_height.';">';
-
-      if($res->img_status == 1)
-        $label_type = "<div class='potfolio_area nailthumb-container'>New</div>";
-      elseif($res->img_status == 2)
-        $label_type = "<div class='potfolio_area'>Featured</div>";
-      else
-        $label_type = "";
-      $image_content .= $label_type;
-      $caption = get_post_field('post_excerpt', $res->image_id);
-      $img_caption = ($caption!="")?$caption:"Untitle Caption";
-
-
-      $buy_now_link = '';
-      $buy_now_price = 0;
-      if($res->enable_buy_now == 1)
-        $buy_now_link = $res->buy_now_option;
-      if($res->buy_now_price != '') {
-        $buy_now_price = $res->buy_now_price;
-      }
-
-      $image_content.= '<a class="cover-img-link gallery" href="#mfp-pop-'.$res->image_id.'" image_id="'.$res->image_id.'" project_id="'.$project_id.'"
-           buy_now_link="'.$buy_now_link.'" buy_now_price="'.$buy_now_price.'">';
-
-
-      $image_content.='<img src="'.$src[0].'" width="'.$width.'" height="'.$height.'"/>';
-      $image_content.='</a></div>';
-
-      /**
-       * Pop-up area - starts
-       */
-      $image_content.= '<div id="mfp-pop-'.$res->image_id.'" class="white-popup mfp-hide">';
-      $image_content.= '<div class="main_cont_area">';
-      $image_content.= '<div class="clasa"><div class="clasa_semantic"><img src="'.$src[0].'"></div></div>';
-      $image_content.= '<div class="clasb">'.$img_caption;
-
-      $image_content.= '<div>'.do_shortcode('[sharethis]').'</div>';
-      // Add-to-wishlist and buy now button area
-      $image_content.= '<div class="buy_now_stats"><div class="buy_now_btn add_to_my_wishlist_lb">';
-      $image_content.= '<a href="#" image_id="'.$res->image_id.'" project_id="'.$project_id.'" id="add_wishlist_bbn_lb" class="pop_add_wish_list">Add To Wishlist</a>';
-      $image_content.= '</div>';
-      if($buy_now_link != '') {
-        $image_content.= '<div class="buy_now_btn" id="pop_buy_now"><a href="'.make_url_with_http($buy_now_link).'" target="_blank">';
-        $image_content.= 'Buy Now</a></div>';
-      }
-      $image_content.= '<div id="lb_msg"></div>';
-      $image_content.= '</div>';
-
-      $image_content.= '<div class="clear"></div></div>';
-      $image_content.= '</div>';
-      $image_content.= '</div>';
-
-      /**
-       * Pop-up area - end
-       */
-
-      $image_content.='<div class="cover-info-stats"><div class="cover-info">';
-      $image_content.='<div class="portfolio_name">';
-
-      if(get_post_field('post_excerpt', $res->image_id)!="") {
-        $pex = get_post_field('post_excerpt', $res->image_id);
-        $excerpt = strip_tags($pex);
-
-        if(strlen($excerpt) > 90) {
-          $final_excerpt = display_limited_words_with_formatting($pex, 100);
-          $image_content.= $final_excerpt . '..<a href="'.$src[0].'" class="socialGallery" image_id="'.$res->image_id.'" project_id="'.$project_id.'"
-                           buy_now_link="'.make_url_with_http($buy_now_link).'" buy_now_price="'.$buy_now_price.'">more</a>';
-        } else {
-          $final_excerpt = display_limited_words_with_formatting($pex, 0);
-          $image_content.= '<a href="" class="projectName portfolio_name-link">'.$final_excerpt.'</a>';
-        }
-      }
-      $image_content.='</div>';
-      $image_content.='</div>';
-      $image_content.='<div class="cover-stat-fields-wrap">';
-      $image_content.='</div>';
-      $image_content.='</div>';
-
-      $image_content.='<div class="buy_now_stats"><div class="buy_now_btn add_to_my_wishlist">';
-      $image_content.='<a class="pop_add_wisl" href="#" image_id="'.$res->image_id.'" project_id="'.$project_id.'" id="add_wishlist_bbn'.$res->image_id.'">Add To Wishlist</a>';
-      $image_content.='</div>';
-
-      if($res->enable_buy_now == 1){
-        if($buy_now_link != '') {
-          $image_content.= '<div class="buy_now_btn"><a href="javascript:void(0)"  onclick="window.open(\''.make_url_with_http($buy_now_link).'\',\'_blank\',\'toolbar=yes, scrollbars=yes, resizable=yes, top=200, left=200, width=1000, height=550\');">';
-          $image_content.= 'Buy Now</a></div>';
-        }
-      }
-      $image_content.= '</div>';
-      $image_content.= '</div>';
-    }
-  }
-  return $image_content;
-}
 ?>
-
 <?php wp_nonce_field( 'followers', 'security' ); ?>
 <input type="hidden" name="hdnPath" id="hdnPath" value="<?php echo FOLLOWERS_PLUGIN_URL; ?>" />
 <input type="hidden" name="hdnPostId" id="hdnPostId" value="<?php echo $post_id; ?>" />
@@ -165,7 +27,6 @@ function make_tag_list($tag_name, $project_id) {
     <div class="main_wrap">
         <?php while ( have_posts() ) : the_post();
                 $project_id= get_the_ID();
-
            ?>
         	<div class="no_left_box_mid">
             	<div class="box_left"></div>
@@ -283,64 +144,13 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
 
                 <?php if(has_post_thumbnail( $project_id )){
 
-
          $src = wp_get_attachment_image_src( get_post_thumbnail_id($project_id), 'full');
 
 
+
+
       ?>
-
-                <?php }
-                else
-                {
-                           $src[0] = "http://localhost/everystore_wp3.9/wp-content/themes/wpbehance/images/1.jpg";
-                }
-                 ?>
-                  <input type = "hidden" class = "reg_geolocation" data-lat = "<?php echo $project_reg_addr[0]->lat ?>" data-long = "<?php echo $project_reg_addr[0]->lon ?>">
-                <?php
-                foreach ($project_multiple as $project_multiple_key => $project_multiple_value) {?>
-                      <div class = "map-hidden" id = "map-id">
-                      <input type = "hidden" class = "address" value = "<?php echo $project_multiple_value->street_address ?>">
-                      <input type = "hidden" class = "lat" value = "<?php echo $project_multiple_value->lat ?>">
-                      <input type = "hidden" class = "long" value = "<?php echo $project_multiple_value->lon ?>">
-                      </div>
-                <? } ?>
-                <!-- Viewing Several Addresses -->
-                <div class = "main-div-several-address">
-                  <?php
-                      if(!empty($project_child_addr)){
-                        echo "<h2 class = 'several-address-heading'>List Of Branch Address</h2><br><br>";
-                        $click_here = "Click Here";
-                      }else{
-                          //echo "<h2 class = 'several-address-no-found follow_area' style = 'margin-top: 225px;text-align: center;color: red;'>Branch Address Not Found</h2><br><br>";
-                          $click_here = "";
-                      }
-                   ?>
-
-                <?php
-              foreach ($project_child_addr as $project_child_addr_key => $project_child_addr_value) {?>
-                      <div class = "follow_area several_address_param" style = "float: left;width: 50%;">
-
-                      <label for = "Street Address"><strong>Street Address</strong><span class = "several-address-description"><?php echo $project_multiple_value->street_address ?></span><br><hr>
-                      <label for = "Country"><strong>Country</strong><span class = "several-address-description"><?php echo $project_multiple_value->country ?></span><br><hr>
-                      <label for = "State"><strong>State</strong><span class = "several-address-description"><?php echo $project_multiple_value->state ?></span> <br> <hr>
-                      <label for = "City"><strong>City</strong><span class = "several-address-description"><?php echo $project_multiple_value->city ?></span> <br>  <hr>
-                      <label for = "Zip"><strong>Zip</strong><span class = "several-address-description"><?php echo $project_multiple_value->zip ?></span>  <br>
-
-                      </div>
-                <? } ?>
-                </div>
-                <!-- Viewing Several Addresses -->
-
                 <div class="portfolio_banner"><img src="<?php echo $src[0]; ?>" alt="img" /></div>
-                <!-- <div class = "porfolio_map" id = "map-canvas"></div> -->
-                <div></div>
-                  <div class = "follow_area map_reg_pc" style = "float: left;margin-bottom: 18px;margin-left: 40px;width: 49%;"><span><?php echo $project_reg_addr[0]->street_address ?>&nbsp;&nbsp;<a class = "several_address"><span><?php echo $click_here; ?></span></a></div>
-                  <div class = "porfolio_map" id="map" style="height: 297px!important;">
-                  <div class = "map_reg" style = "float: left;margin-bottom: 18px;margin-left: 40px;width: 49%;"><span><?php echo $project_reg_addr[0]->street_address ?>&nbsp;&nbsp;<a class = "several_address"><span><?php echo $click_here; ?></span></a></div>
-                  <div class = "porfolio_map_ipad" id="mapIpad" style="width:100%;height: 100%!important;">
-
-                </div>
-                <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 
 
                 <script type="text/javascript">
@@ -366,28 +176,9 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                     }
                     });
                 });
+                    </script>
 
-                jQuery(document).ready(function($){
-                    jQuery(".tag-content-trigger").click(function(){
-                    	  var tag = jQuery(this).data("tag");
-
-                    	  jQuery(".tag-conttent-box").css({'display' : 'block'});
-                    	  jQuery(".tag-conttent-box").find(".project-cover").each(function(e){
-                        	  if(jQuery(this).data("ntag") == tag)
-                        		  jQuery(this).css({'display' : 'block'});
-                        	  else
-                        		  jQuery(this).css({'display' : 'none'});
-                        })
-                    	  jQuery(".all-content-box").css({'display' : 'none'});
-                    });
-                    jQuery(".tag-content-all").click(function(){
-                    	jQuery(".tag-conttent-box").css({'display' : 'none'});
-                    	jQuery(".all-content-box").css({'display' : 'block'});
-                    });
-                });
-                </script>
-
-
+                <?php } ?>
 
 
 
@@ -416,11 +207,9 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                      $tags_obj_= array_unique($tags_obj);
                      $tag_string = '<ul class="filter_tags">';
                      foreach($tags_obj_ AS $tag) {
-                       //$tag_string.='<li><a href="'.get_permalink($project_id).'?tag='.$tag.'" tag_slug="'.$tag.'">'.$tag.'</a>';
-                       $tag_string.='<li><a href="javascript: void(0);" class="tag-content-trigger" data-tag="'.$tag.'" tag_slug="'.$tag.'">'.$tag.'</a>';
+                       $tag_string.='<li><a href="'.get_permalink($project_id).'?tag='.$tag.'" tag_slug="'.$tag->slug.'">'.$tag.'</a>';
                      }
-                     //$tag_string.= '<li><a href="'.get_permalink($project_id).'" tag_slug="">All</a>';
-                     $tag_string.= '<li><a href="javascript: void(0);" class="tag-content-all">All</a>';
+                     $tag_string.= '<li><a href="'.get_permalink($project_id).'" tag_slug="">All</a>';
                      $tag_string.= "</ul>";
                    }
 
@@ -432,48 +221,32 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                 </div>
 
                 <div class="project_details_image_section" id="project_details_image_section_id">
-                <?php
-
-                if(count($tags_obj)){
-                  $tags = array_unique($tags_obj);
-                  echo '<div class="tag-conttent-box">';
-                  foreach($tags as $tag) {
-                    $tag_list_content = make_tag_list($tag, $project_id);
-
-                    echo $tag_list_content;
-
-                  }
-                  echo '</div>';
-                }
-                ?>
 
                 <?php
-
+                if (function_exists('st_makeEntries')) :
+                  add_shortcode('sharethis', 'st_makeEntries');
+                endif;
                 /**
                  *
                  */
                 global $wpdb;
 
-                $tag = isset($_GET['tag']) ? sanitize_title($_GET['tag']) : '';
+                $tag = isset($_GET['tag']) ? $_GET['tag'] : '';
                 if($tag == '') {
 
                   $sql = "SELECT pi.* FROM ".$wpdb->prefix."portfolio_images pi, ".$wpdb->prefix."posts p ";
                   $sql.= "WHERE p.ID = pi.image_id AND portfolio_id = $project_id ORDER BY pi.order_pos ASC";
-                  $results = $wpdb->get_results($sql);
+
                 } else {
 
-                  $sql = "SELECT t.term_id,tx.term_taxonomy_id FROM {$wpdb->prefix}terms AS t INNER JOIN {$wpdb->prefix}term_taxonomy ";
-                  $sql.= "AS tx ON t.term_id = tx.term_id WHERE t.slug LIKE '$tag' AND tx.taxonomy = 'post_tag'";
-                  $term = $wpdb->get_row($sql);
-                  $term_taxonomy_id = $term->term_taxonomy_id;
+                  $sql = "SELECT pi.* FROM ".$wpdb->prefix."portfolio_images pi, ".$wpdb->prefix."posts p, ";
+                  $sql.= $wpdb->prefix."terms t, ".$wpdb->prefix."term_relationships tr WHERE t.name = '$tag' AND ";
+                  $sql.= "tr.object_id = pi.image_id AND p.ID = pi.image_id AND pi.portfolio_id = $project_id ";
+                  $sql.= "ORDER BY pi.order_pos ASC";
 
-                  $obj_sql = "SELECT ob.object_id,pi.* FROM {$wpdb->prefix}term_relationships AS ob RIGHT JOIN {$wpdb->prefix}portfolio_images ";
-                  $obj_sql.= "AS pi ON ob.object_id = pi.image_id WHERE ob.term_taxonomy_id = $term_taxonomy_id AND ";
-                  $obj_sql.= "ob.object_id != $project_id";
-                  $results = $wpdb->get_results($obj_sql);
                 }
 
-
+                $results = $wpdb->get_results($sql);
                 $image_content = '';
 
                 if(count($results) > 0){
@@ -506,6 +279,7 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                     $caption = get_post_field('post_excerpt', $res->image_id);
                     $img_caption = ($caption!="")?$caption:"Untitle Caption";
 
+                    //print_r($src);
 
                     $buy_now_link = '';
                     $buy_now_price = 0;
@@ -586,9 +360,7 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                     $image_content.= '</div>';
                   }
                 }
-                echo '<div class="all-content-box">';
                 print $image_content;
-                echo '</div>';
                 ?>
                 <div class="clear"></div>
                 </div>
@@ -597,7 +369,7 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
 
                   $post_categories =wp_get_post_categories( $project_id);
                   $catt=@implode(",",$post_categories);
-                  $smiler_obj = new WP_Query( array ( 'orderby' => 'rand', 'posts_per_page' => '8', 'cat'=>$catt,  'post_type' => 'projects', 'post_status'=>'publish'));
+                  $smiler_obj = new WP_Query( array ( 'orderby' => 'rand', 'posts_per_page' => '4', 'cat'=>$catt,  'post_type' => 'projects', 'post_status'=>'publish'));
                  // echo "<pre>";
                   //var_dump($smiler_obj->posts);
                   if(count($smiler_obj->posts)){

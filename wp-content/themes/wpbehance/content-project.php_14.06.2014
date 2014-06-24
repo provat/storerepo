@@ -25,34 +25,26 @@ global $project;
           <?php echo get_the_title($project->ID); ?>
         </a>
       </div>
-      <?php
-      $post_date = get_post_meta($project->ID, 'project_date', true);
-      if($post_date == '') {
-        $post_date = time();
-      }
-      $is_multiple_address = get_post_meta($project->ID, 'multiple_address_status', true);
-      $country_name = get_post_meta($project->ID, 'countryName', true);
-      // get city name
-      global $wpdb;
-      $sql = "SELECT city FROM {$wpdb->prefix}project_multiple_address WHERE project_id=$project->ID";
-      $row = $wpdb->get_row($sql);
-      ?>
+      <?php /*
       <div class="cover-by-wrap">
-        <div class="cover-by">
-          <?php
-          if($is_multiple_address == 'Y')
-            echo 'Several cities';
-          else {
-            if($row->city != '') {
-              echo $row->city;
-            }
-          }
-          echo ','.$country_name;
-          ?>
-        </div>
-        <div class="cover-by"><?php echo date('d.m.y', $post_date);?></div>
+        <div class="cover-by">by</div>
+	      <?php
+        $author_id=get_post_field( 'post_author', $project->ID );
+        $user_profile = get_user_meta($author_id, 'profile_name', true);
+        $author_name = get_the_author_meta( 'display_name' , $author_id );
+	      ?>
+          <div class="cover-by-link">
+	          <?php if($user_profile!=''){ ?>
+	          <a title="<?php echo $user_profile; ?>" href="<?php echo home_url().'/profile/'.$user_profile; ?>/?id=<?php echo $author_id; ?>" class="cover-link">
+	          <?php } else { ?>
+	          <a title="<?php echo $author_name; ?>" class="cover-link">
+	          <?php }
+            echo the_author_meta( 'display_name' , $author_id );
+            ?>
+            </a>
+          </div>
       </div>
-
+      */?>
     </div>
 
     <?php
@@ -67,7 +59,7 @@ global $project;
     <?php if( strlen(strip_tags($output)) > 35) { ?>
   	<div class="cover-fields" style="margin-right:10px;margin-left:5px;">
   	  <div class="horizontal_scroller " id="horizontal_scroller<?php echo $project->ID; ?>" >
-  		<!--<div id="div<?php //echo $project->ID; ?>"><?php //echo $output; ?></div>-->
+  		<!--<div id="div<?php echo $project->ID; ?>"><?php echo $output; ?></div>-->
   		<div class="scrollingtext" id="scrollingtext<?php echo $project->ID; ?>" ><?php echo $output; ?></div>
   	  </div>
   	</div>
@@ -92,7 +84,7 @@ global $project;
         </span>
         <span class="cover-stat">
         	<span class="stat-label"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/viewer.png" /></span>
-            <span class="stat-value"><?php echo ($project_viewer!='')? $project_viewer : '0'; ?></span>
+            <span class="stat-value"><?php echo ($project_viewer!='')?$project_viewer : '0'; ?></span>
         </span>
       </div>
     </div>

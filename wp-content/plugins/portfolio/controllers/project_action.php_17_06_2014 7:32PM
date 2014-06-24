@@ -156,6 +156,7 @@ Class projects {
         
          $my_post = array(
             'ID'           => $project_id,
+            
             'post_status'  =>'draft'
                
             );
@@ -174,7 +175,7 @@ Class projects {
         
          $my_post = array(
             'ID'           => $project_id,
-            'post_date'  => date('Y-m-d H:i:s'),
+            
             'post_status'  =>'publish'
                
             );
@@ -189,11 +190,11 @@ Class projects {
     public function save_or_publish_project(){
         global $wpdb;
         check_ajax_referer( $_POST['referer'],'security');
-        //$geoplugin = getLocationInfoByIp();
-             
+        $geoplugin = getLocationInfoByIp();
+        
         $project_id=$_POST['project_id'];
         $project_content=$_POST['project_desc'];
-        $project_date=strtotime($_POST['project_date']);        
+        $project_date=$_POST['project_date'];        
         $project_category=$_POST['project_cats'];
         $project_status=$_POST['project_status'];
         $project_title=$_POST['project_title'];
@@ -205,117 +206,92 @@ Class projects {
         $country_all=$_POST['country_all'];
         $state_all=$_POST['state_all'];
         $city_all=$_POST['city_all'];
-    
-    if($project_country!='')
+  if($project_country!=''){
+    $country_code = '';
+    $country_name = '';
+    if(count($project_country) > 1)
     {
-        $country_code = explode('|', $project_country);
-        $country_name_q = $wpdb->get_row("select * from wp_country where country_code = '".$country_code[0]."'");
-        $country_name = $country_name_q->country_name;
-
+      for($i=0;$i<count($project_country); $i++)
+      {
+        $country_code .= $project_country[$i].',';
+        $country_name_q = $wpdb->get_row("select * from wp_country where country_code = '".$project_country[$i]."'");
+        $country_name .= $country_name_q->country_name.',';
+      }
+      $country_code = substr($country_code,0,-1);
+      $country_name = substr($country_name,0,-1);
     }
     else{
+      $country_code = $project_country;
+      $country_name_q = $wpdb->get_row("select * from wp_country where country_code = '".$country_code."'");
+      $country_name = $country_name_q->country_name;
+    }
+  }else{
     $country_name = $geoplugin['country_name'];
     $country_code = $geoplugin['country'];
   }  
 
-
   if($project_state!='')
-  //$state = $project_state;
-  $state = explode('|', $project_state);
+  $state = $project_state;
   else
   $state = $geoplugin['geoState'];     
 
   if($project_street!='')
-  //$street = $project_street; 
-  $street = explode('|', $project_street);
+  $street = $project_street; 
 
   if($project_zip!='')
-  //$zip = $project_zip;  
-  $zip = explode('|', $project_zip);
-$encode_address = $street[0]."+".$city[0]."+".$state[0]."+".$zip[0];
- $geoplugin_lat_long_reg = ziplatlotinfo($encode_address);  
- $geoplugin_lat_long_reg_arr = explode('|', $geoplugin_lat_long_reg);
-
+  $zip = $project_zip;  
 
   if($project_city!='')
-  //$city = $project_city;
-  $city = explode('|', $project_city);
-
-
+  $city = $project_city;
   else
   $city = $geoplugin['geoCity'];       
         
-  if($_POST['countRows']>1)
-  $stats = 'Y';
-  else
-  $stats = 'N';
-
         if(get_post_status( $project_id )=="publish")
-        {
-           $project_status_new="publish";
-        }
-
+            $project_status_new="publish";
         else 
-        {
-          $project_status_new=$project_status;
-        }
-
+            $project_status_new=$project_status;
         
        
         $my_post = array(
             'ID'           => $project_id,
             'post_title' =>$project_title,
-            'post_date'  => date('Y-m-d H:i:s'),
             'post_content' => $project_content,
             'post_category' =>$project_category,
             'post_status'  =>$project_status_new
                
             );
-          //echo $geoplugin_zip_reg;
+             
           wp_update_post($my_post);
           $pre_ip_address=get_post_meta( $project_id, "ip_address", true );
           update_post_meta($project_id, "ip_address",$geoplugin['ip_address'], $pre_ip_address);
           
-  
-          $pre_geoLatitude=get_post_meta( $project_id, "geoLatitude", true );
-          update_post_meta($project_id, "geoLatitude",$geoplugin_lat_long_reg_arr[0], $pre_geoLatitude);
-          
-          
-          $pre_geoLongitude=get_post_meta( $project_id, "geoLongitude", true );
-          update_post_meta($project_id, "geoLongitude",$geoplugin_lat_long_reg_arr[1], $pre_geoLongitude);
-          
-
-
-          $pre_date=get_post_meta( $project_id, "project_date", true );
-          update_post_meta($project_id, "project_date",$project_date, $pre_date);
-
           $pre_country_name=get_post_meta( $project_id, "countryName", true );
           update_post_meta($project_id, "countryName",$country_name, $pre_country_name);
           
           $pre_country_code=get_post_meta( $project_id, "countryCode", true );
-          update_post_meta($project_id, "countryCode",$country_code[0], $pre_country_code);
-           
-         
-         
-         /* for($i=0;$i<$_POST['countRows'];$i++)
-          {*/
+          update_post_meta($project_id, "countryCode",$country_code, $pre_country_code);
+          
+          $pre_geoLatitude=get_post_meta( $project_id, "geoLatitude", true );
+          update_post_meta($project_id, "geoLatitude",$geoplugin['geoLatitude'], $pre_geoLatitude);
+          
+          
+          $pre_geoLongitude=get_post_meta( $project_id, "geoLongitude", true );
+          update_post_meta($project_id, "geoLongitude",$geoplugin['geoLongitude'], $pre_geoLongitude);
+          
           $pre_geoStreet=get_post_meta( $project_id, "geoStreet", true );
-          update_post_meta($project_id, "geoStreet",$street[0], $pre_geoStreet);
+          update_post_meta($project_id, "geoStreet",$street, $pre_geoStreet);
 
           $pre_geoState=get_post_meta( $project_id, "geoState", true );
-          update_post_meta($project_id, "geoState",$state[0], $pre_geoState);
+          update_post_meta($project_id, "geoState",$state, $pre_geoState);
           
           $pre_geoCity=get_post_meta( $project_id, "geoCity", true );
-          update_post_meta($project_id, "geoCity",$city[0], $pre_geoCity);
+          update_post_meta($project_id, "geoCity",$city, $pre_geoCity);
 
           $pre_geoZip=get_post_meta( $project_id, "geoZip", true );
-          update_post_meta($project_id, "geoZip",$zip[0], $pre_geoZip);
-       
-          $pre_multiple_address_status=get_post_meta( $project_id, "multiple_address_status", true );
-          update_post_meta($project_id, "multiple_address_status",$stats, $pre_multiple_address_status);
-          
-       /* }*/
+          update_post_meta($project_id, "geoZip",$zip, $pre_geoZip);
 
+          $pre_date=get_post_meta( $project_id, "date", true );
+          update_post_meta($project_id, "date",$project_date, $pre_date);
 
     if($country_all=='Y')
     {
@@ -334,87 +310,32 @@ $encode_address = $street[0]."+".$city[0]."+".$state[0]."+".$zip[0];
           $wpdb->query( 
             $wpdb->prepare("UPDATE  ".$wpdb->prefix."posts SET latitude=%s, longitude=%s
                       WHERE ID=%d ",
-                      $geoplugin_lat_long_reg_arr[0], $geoplugin_lat_long_reg_arr[1], $project_id
+                      $geoplugin['geoLatitude'], $geoplugin['geoLongitude'], $project_id
             )
             );
-      
+
+          $wpdb->insert('wp_project_meta', 
+            array(
+              'project_id'          => $project_id,
+              'project_zip'       =>   $zip,
+              'project_lat'       =>   $geoplugin['geoLatitude'],
+              'project_long'      =>   $geoplugin['geoLongitude']
+            ),
+            array(
+              '%s',
+              '%s',
+              '%s',
+              '%s'
+            ) 
+          );
+          
+          
           $projects['status']=$project_status;
           $projects['plink']=  get_permalink($project_id);
           print json_encode($projects);
-
-          /*Cleaning wp_project_multiple_address Current Project ID*/
-                  $wpdb->delete( 'wp_project_multiple_address', array( 'project_id' => $project_id) );
-          /*Cleaning wp_project_multiple_address Current Project ID*/
-
-       for($k=0;$k<$_POST['countRows'];$k++)
-       {
-
-          if($k==0)
-          {
-
-           $wpdb->insert( 
-            'wp_project_multiple_address', 
-            array(
-                'project_id'          => $project_id,
-                'city'                =>   $city[$k],
-                'country'             =>   $country_code[$k],
-                'street_address'      =>   $street[$k],
-                'state'               =>   $state[$k],  
-                'zip'                 =>   $zip[$k],                                        
-                'lat'         =>   $geoplugin_lat_long_reg_arr[0],
-                'lon'        =>   $geoplugin_lat_long_reg_arr[1],
-                'is_main_address' => 'Yes'
-              ), 
-            array( 
-              '%s', 
-              '%s', 
-              '%s',
-              '%s',
-              '%s',
-              '%s',
-              '%s',
-              '%s',
-              '%s'
-            ) 
-          );
-        }
-        else
-          {
-            $encode_address = $street[$k]."+".$city[$k]."+".$state[$k]."+".$zip[$k];
-             $geoplugin_lat_long_branch = ziplatlotinfo($encode_address);  
-            $geoplugin_lat_long_branch_arr = explode('|', $geoplugin_lat_long_branch);
-           $wpdb->insert( 
-            'wp_project_multiple_address', 
-            array(
-                'project_id'          => $project_id,
-                'city'                =>   $city[$k],
-                'country'             =>   $country_code[$k],
-                'street_address'      =>   $street[$k],
-                'state'               =>   $state[$k],  
-                'zip'                 =>   $zip[$k],                                        
-                'lat'         =>   $geoplugin_lat_long_branch_arr[0],
-                'lon'        =>   $geoplugin_lat_long_branch_arr[1],
-                'is_main_address' => 'No'
-              ), 
-            array( 
-              '%s', 
-              '%s', 
-              '%s',
-              '%s',
-              '%s',
-              '%s',
-              '%s',
-              '%s',
-              '%s'
-            ) 
-          );
-        }
-
-       } 
-       
+          die();
         
-       
-       die();
+        
     }
     
     //crop cover images

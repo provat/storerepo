@@ -42,83 +42,62 @@ Class DisplayProjects {
 
 
     public function display_projects_accor_location() {
-      global $wpdb;
-      $post_per_page = 32;
-      $paged = ( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1;
-
-      $latitude=$_POST['latitude'];
-      $longitude=$_POST['longitude'];
-
-      $offset = ($paged - 1)*$post_per_page;
-      $offset = ($offset <= 0) ? 0 : $offset;
+    global $wpdb;
+    $post_per_page = 12;
+    $paged = ( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1;
+    $latitude=$_POST['latitude'];
+    $longitude=$_POST['longitude'];
+    $offset = ($paged - 1)*$post_per_page;
+    $offset = ($offset <= 0) ? 0 : $offset;
 
 
+if( $latitude !='' &&  $longitude !='')
+{
+/*$sql_query=" SELECT p.ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", p.latitude, p.longitude) as distance_from_input FROM ".$wpdb->prefix."posts p JOIN ".$wpdb->prefix."icl_translations t ON p.ID = t.element_id AND t.element_type = 'post_projects' JOIN ".$wpdb->prefix."icl_languages l ON t.language_code=l.code AND l.active=1 WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') AND t.language_code='".ICL_LANGUAGE_CODE."' ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;*/
 
-      if( $latitude !='' &&  $longitude !='')
-      {
-        /*$sql_query=" SELECT p.ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", p.latitude, p.longitude) as distance_from_input FROM ".$wpdb->prefix."posts p JOIN ".$wpdb->prefix."icl_translations t ON p.ID = t.element_id AND t.element_type = 'post_projects' JOIN ".$wpdb->prefix."icl_languages l ON t.language_code=l.code AND l.active=1 WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') AND t.language_code='".ICL_LANGUAGE_CODE."' ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;*/
-        //$sql_query=" SELECT ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", latitude, longitude) as distance_from_input FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;
-        // $sql_query = "SELECT p.*, (((acos(sin(($latitude*pi()/180)) * sin((`latitude`*pi()/180))+cos(($latitude*pi()/180)) * cos((`latitude`*pi()/180)) * cos((($longitude - `longitude`)*pi()/180))))*180/pi())*60*1.1515*1.609344) AS `distance` FROM ".$wpdb->prefix."posts p  WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') ORDER BY distance ASC,p.post_date DESC LIMIT ".$offset." ,".$post_per_page;
+//$sql_query=" SELECT ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", latitude, longitude) as distance_from_input FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;
 
-        /* $ip = $_SERVER['HTTP_CLIENT_IP'];
-        $objlocation = getlatlang($ip);
-        $latitude = $objlocation->lat;
-        $longitude = $objlocation->lng; */
-        $range = 1000;
+$sql_query = "SELECT p.*, (((acos(sin(($latitude*pi()/180)) * sin((`latitude`*pi()/180))+cos(($latitude*pi()/180)) * cos((`latitude`*pi()/180)) * cos((($longitude - `longitude`)*pi()/180))))*180/pi())*60*1.1515*1.609344) AS `distance` FROM ".$wpdb->prefix."posts p  WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') ORDER BY distance ASC,p.ID DESC LIMIT ".$offset." ,".$post_per_page;
+}
+else
+{
+$sql_query=" SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY ID DESC LIMIT ".$offset." ,".$post_per_page;
+}
 
-        $lat_range = $range/69.172;
-        $lon_range = abs($range/(cos($latitude) * 69.172));
 
-        $min_lat = number_format($latitude - $lat_range, "4", ".", "");
-        $max_lat = number_format($latitude + $lat_range, "4", ".", "");
-        $min_lon = number_format($longitude - $lon_range, "4", ".", "");
-        $max_lon = number_format($longitude + $lon_range, "4", ".", "");
+  $resaults=$wpdb->get_results($sql_query);
 
-        $sql = "SELECT project_id,zip,lat,lon,( 3959 * acos( cos( radians(42.290763) ) * cos( radians(lat)) * cos( radians(lon) - radians(-71.35368) ) + sin( radians(42.90763))  * sin( radians( lat ) ) ) ) AS distance FROM wp_project_multiple_address WHERE lat BETWEEN $min_lat AND $max_lat ";
-        $sql.= "AND lon BETWEEN $min_lon AND $max_lon ORDER BY distance ASC";
-        $rows = $wpdb->get_results($sql);
-        $ids = array();
-        if(count($rows) > 0) {
-          foreach($rows as $r => $row) {
-            $ids[] = $row->project_id;
-          }
-          $ids = implode(",", $ids);
+  if(count($resaults)<$post_per_page)
+        $last_page=1;
+  else
+        $last_page=2;
 
-          $sql_query_join = "SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE ID IN($ids) AND ";
-          $sql_query_join.= "post_status = 'publish' LIMIT ".$offset." ,".$post_per_page;
+  ob_start();
+  foreach($resaults as $projects){
 
-        } else {
-          $sql_query_join = " SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
-        }
 
-      }
-      else
-      {
-        $sql_query_join = " SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
-      }
-      $resaults = $wpdb->get_results($sql_query_join);
+           $GLOBALS['project']=$projects;
 
-      if(count($resaults)<$post_per_page)
-         $last_page=1;
-      else
-         $last_page=2;
+           get_template_part("content", "project");
 
-      ob_start();
-      foreach($resaults as $projects){
-        $GLOBALS['project']=$projects;
-        get_template_part("content", "project");
-      }
+  }
+$data['sql_query'] = $sql_query;
+  $data['content'] = ob_get_contents();
+  $data['paged']=$paged;
+  $data['lpage']=$last_page;
+  $data['qq']=$sql_query;
+  $data['cc']=count($resaults);
 
-      $data['sql_query'] = $sql;
-      $data['content'] = ob_get_contents();
-      $data['paged'] = $paged;
-      $data['lpage'] = $last_page;
-      $data['qq'] = $sql_query;
-      $data['cc'] = count($resaults);
+  ob_end_clean();
 
-      ob_end_clean();
-      print json_encode($data);
-      die();
+
+
+  print json_encode($data);
+
+
+    die();
+
+
     }
 
 
@@ -351,7 +330,7 @@ Class DisplayProjects {
 
         $image_content .= $vvv;
         $caption = get_post_field('post_excerpt', $res->image_id);
-        $img_caption = ($caption!="")?$caption:"Untitle Caption";
+        $img_caption=($caption!="")?$caption:"Untitle Caption";
         $src = wp_get_attachment_image_src($res->image_id , 'full');
 
         $buy_now_link = '';
@@ -362,7 +341,7 @@ Class DisplayProjects {
           $buy_now_price = $res->buy_now_price;
         }
 
-        $image_content.= '<a class="cover-img-link gallery" href="#mfp-pop-'.$res->image_id.'" image_id="'.$res->image_id.'" project_id="'.$project_id.'"
+        $image_content.= '<a class="cover-img-link socialGallery" href="'.$src[0].'" image_id="'.$res->image_id.'" project_id="'.$project_id.'"
                          buy_now_link="'.$buy_now_link.'" buy_now_price="'.$buy_now_price.'">';
         //$image_content.=remove_width_and_height_attribute(wp_get_attachment_image( $res->image_id, 'thumbnail' ));
         //$image_content.= '<a class="inline" href="#inline_content'.$res->image_id.'">';
@@ -377,14 +356,6 @@ Class DisplayProjects {
           $width = $src[1];
         $image_content.='<img src="'.$src[0].'" width="'.$width.'" height="'.$height.'" class="" title="'.htmlspecialchars($img_caption).'"/>';
         $image_content.='</a></div>';
-
-        $image_content.= '<div id="mfp-pop-'.$res->image_id.'" class="white-popup mfp-hide">';
-        $image_content.= '<div class="main_cont_area">';
-        $image_content.= '<div class="clasa"><img src="'.$src[0].'" width="100%"></div>';
-        $image_content.= '<div class="clasb">'.$img_caption.'<div class="clear"></div></div>';
-        $image_content.= '</div>';
-        $image_content.= '</div>';
-
         $image_content.='<div class="cover-info-stats"><div class="cover-info">';
         $image_content.='<div class="portfolio_name">';
 
@@ -433,8 +404,6 @@ Class DisplayProjects {
         $image_content.= '</div>';
 
       }
-      return $image_content;
-
       $data['img_content']=$image_content;
       //$data['tag_content']=$tag_string;
       $data['paged']=$paged;

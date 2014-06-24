@@ -31,7 +31,7 @@ $project_id=$_REQUEST['project_id'];
    //wp_dropdown_categories('orderby=name&exclude=1&hide_empty=0'); 
    
    ?> 
-        <select name="project_cat" id="project_categories" class="chosen-select dropdown_select_cat" multiple>
+        <select name="project_cat" id="project_categories" class="chosen-select dropdown_select_cat" >
           
             <?php foreach($rew_categories as $rew_category){ ?>
             <option value="<?php echo $rew_category->term_id; ?>" <?php if(@in_array($rew_category->term_id,$cat_ids)){ echo "selected"; }?> ><?php echo $rew_category->name; ?></option>
@@ -76,8 +76,6 @@ $project_id=$_REQUEST['project_id'];
       <br>
   </div>
   </div>
-  <input type = "hidden" class = "count_div">
-  <input type = "hidden" class = "formation_id">
  
 </div>
 

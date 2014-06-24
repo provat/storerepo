@@ -7,22 +7,6 @@ jQuery(function($){
         
      }); 
      
-     /*jQuery(".tag-content-trigger").click(function(){
-   	  var tag = jQuery(this).data("tag");
-   	  var pid = jQuery(this).data("pid");
-   	  //jQuery(".project-cover").css({'display' : 'none'});
-   	  //jQuery("#tag-"+tag).css({'display' : 'block'});
-   	  var data = {
-             action: 'get_tag_wise_projects_list',
-             tag: tag,
-             pid: pid            
-         };
-   		$.getJSON( myAjax.ajaxurl, data)
-   	    .done(function(result,statusTxt,xhr) {
-   		   $("#project_details_image_section_id").html(result.img_content);		   
-   	    });
-   	});*/
-     
      // continue project action from top toolbar
      
      $(".project_toolbar #continu_project").click(function(event){
