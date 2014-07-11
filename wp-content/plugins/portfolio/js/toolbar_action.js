@@ -278,6 +278,39 @@ jQuery(function($){
        
    });
 
+
+   $(document).on("click",".button_panel .publish_project_btn", function(){
+       project_id=$(this).attr("project_id");
+      
+       
+       var data = {
+                action: 'publish_project',
+                referer: 'continu_project_dialog',
+                project_id: project_id,
+                security: $('#continu_project_dialog').attr('data-security')
+            };
+            
+            $("#continu_project_dialog").append("<div class='overrite_layer'><span class='loader_img'></span></div>");
+            
+            $.ajax({
+                url:myAjax.ajaxurl,
+                data: data,
+                type:"post",
+                success: function( result3 ){
+                    //$('#continu_project_dialog').dialog("close");
+                    var resault = $.parseJSON(result3);
+                    var idname="#project_cover"+resault.project_id;
+                    //$(idname).remove();
+                    //alert(resault.redirect_to);
+                    window.location.href=resault.redirect_to
+                   
+                }
+            });
+       
+       
+       
+   });
+
    
     //load project record   
    $.load_project_images();
@@ -313,5 +346,22 @@ jQuery(function($){
   return false;
        
    }
+
+   jQuery.publishProject=function(event, project_id, project_title){
+       
+       event.preventDefault();
+  
+
+    $('#continu_project_dialog').dialog("option","width","auto"); 
+    $('#continu_project_dialog').dialog("open").siblings('.ui-dialog-titlebar').html("publish Project");
+    $("#continu_project_dialog #continu_project_dialog_target").html('<div>Do You Want to publish  <b>"'+project_title+'"</b> ?</div><div class="button_panel"><input class="publish_project_btn" type="button" value="Publish" name="Save" project_id="'+project_id+'"><input class="cancle_unpublish_project_btn" type="button" value="Cancel" name="cancle"></div>');
+     
+    
+  return false;
+       
+   }
+    
+
+
     
 });

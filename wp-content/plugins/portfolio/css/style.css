@@ -330,6 +330,7 @@ a.btn_bg:hover { color:#e4e4e4; text-decoration:none;}
 /* 22-11-13 */
 .projects_settings_frms { position:relative;}
 .projects_settings_frms textarea { width:99%;}
+
 .overrite_layer { position:absolute; background:#ccc; opacity:.6; width:auto; height:auto; left:-20px; right:-20px; top:-20px; bottom:-85px; text-align:center;}
 #continu_project_dialog_target .project_title { border:0 !important;}
 #dynamic_port_folio_images234 { margin:0 4%;}
@@ -338,3 +339,29 @@ a.btn_bg:hover { color:#e4e4e4; text-decoration:none;}
 /*23-11-13*/
 #continu_project_dialog_target .button_panel .loader_img { position:absolute; top:48%; left:0%; right:48%;}
 
+/*14-06-14*/
+.projects_settings_frms .child-btn
+{
+float: right;
+}
+.projects_settings_frms .add-more
+{
+background: #2990B7;
+padding: 5px;
+color: #ffffff;
+font-weight: bold;
+cursor: pointer;
+}
+.projects_settings_frms .remove-child
+{
+background: #AF2727;
+padding: 5px;
+color: #ffffff;
+font-weight: bold;
+cursor: pointer;
+}
+.projects_settings_frms  #project_date{
+    border: 1px solid hsl(0, 0%, 80%);
+    padding: 6px 10px;
+    width: 96%;
+}
