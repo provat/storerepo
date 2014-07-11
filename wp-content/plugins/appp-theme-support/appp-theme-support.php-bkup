@@ -1,0 +1,174 @@
+<?php
+/*
+ Plugin Name: Appp Theme Support
+ Plugin URI: http://everystore.co
+ Description: This plugin helps to build required functionalty for Appp-child theme.
+ Author: Provat Das
+ Version: 1.0
+ Author URI: http://everystore.co
+*/
+
+//include dirname(__FILE__) . '/function.php';
+/**
+ * Shortcode to load home page content
+ */
+function appchild_load_home_content($atts) {
+  global $wpdb;
+  $post_per_page = 32;
+  $paged = isset( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1;
+
+  $latitude = isset($_POST['latitude']) ? $_POST['latitude'] : '';
+  $longitude = isset($_POST['longitude']) ? $_POST['longitude'] : '';
+
+  $offset = ($paged - 1)*$post_per_page;
+  $offset = ($offset <= 0) ? 0 : $offset;
+
+  if( $latitude !='' &&  $longitude !='')
+  {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
+    $objlocation = getlatlang($ip);
+    $latitude = $objlocation->lat;
+    $longitude = $objlocation->lng;
+
+    $lon = $longitude;
+    $lat = $latitude;
+    $distance = 20;
+
+    $sql = "SELECT project_id,zip,lat,lon,( 3959 * acos( cos( radians('$lat') ) * cos( radians( lat ) ) * cos( radians( lon ) - radians('$lon') ) + sin( radians('$lat') ) * sin( radians( lat ) ) ) ) AS distance FROM wp_project_multiple_address where is_main_address = 'Yes'";
+    $sql.= " having distance<='$distance' ORDER BY distance ASC LIMIT 0, 10";
+    $rows = $wpdb->get_results($sql);
+    $ids = array();
+    if(count($rows) > 0) {
+      foreach($rows as $r => $row) {
+        $ids[] = $row->project_id;
+        $GLOBALS['distance'][$row->project_id]=$row;
+      }
+      $ids = implode(",", $ids);
+
+      $sql_query_join = "SELECT ID, latitude, longitude, ( 3959 * acos( cos( radians('$lat') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$lon') ) + sin( radians('$lat') ) * sin( radians( latitude ) ) ) ) AS distance FROM ".$wpdb->prefix."posts WHERE ID in ($ids)";
+      $sql_query_join.= " AND post_status = 'publish' order by distance asc LIMIT ".$offset." ,".$post_per_page;
+
+    } else {
+      $sql_query_join = "SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
+    }
+  } else {
+    $sql_query_join = "SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
+  }
+
+  $results = $wpdb->get_results($sql_query_join);
+  if(count($results) < $post_per_page)
+     $last_page = 1;
+  else
+     $last_page = 2;
+
+
+  $content = '';
+  foreach($results as $project){
+
+
+    $content.= '<div class="project-cover" id="project_cover'. $project->ID .'">';
+    $content.= '<div class="cover-img">';
+    $content.= '<a class="cover-img-link" href="'. get_permalink($project->ID) .'">';
+
+    if(has_post_thumbnail( $project->ID )){
+      $src = wp_get_attachment_image_src( get_post_thumbnail_id($project->ID), 'thumbnail');
+      $content.= '<img  src="' .$src[0] .'" class="cover-img-el cover-img-standard" width="202" height="158">';
+    } else {
+      $content.= '<img  src="/images/1.jpg" class="cover-img-el cover-img-standard" >';
+    }
+    $content.= '</a>';
+    $content.= '</div>';
+
+    $content.= '<div class="cover-info-stats">';
+    $content.= '<div class="cover-info-home">';
+    $content.= '<div class="cover-name">';
+    $content.= '<a class="projectName cover-name-link" href="'. get_permalink($project->ID) .'">';
+    $content.= get_the_title($project->ID) .'</a>&nbsp;&nbsp;';
+    if(!empty($project->distance)) {
+      $dis = round(($project->distance * 1.609),2);
+      if($dis<1) {
+        $dis = $dis * 1000; echo round(($dis),2)." "."Meters";
+      } else {
+        echo round(($project->distance * 1.609),2)." "."KM";
+      }
+    }
+    $content.= '</div>';
+    $post_date = get_post_meta($project->ID, 'project_date', true);
+    if($post_date == '') {
+      $post_date = time();
+    }
+    $is_multiple_address = get_post_meta($project->ID, 'multiple_address_status', true);
+    $country_name = get_post_meta($project->ID, 'countryName', true);
+    // get city name
+    global $wpdb;
+    $sql = "SELECT city FROM {$wpdb->prefix}project_multiple_address WHERE project_id=$project->ID";
+    $row = $wpdb->get_row($sql);
+    $content.= '<div class="cover-by-wrap">';
+    $content.= '<div class="cover-by">';
+
+    if($is_multiple_address == 'Y')
+      $content.= 'Several cities';
+    else {
+      if($row->city != '') {
+        $content.= $row->city;
+      }
+    }
+    $content.= ','.$country_name;
+    $content.= '</div>';
+    $content.= '<div class="cover-by">'. date('d.m.y', $post_date) .'</div>';
+    $content.= '</div>';
+    $content.= '</div>';
+
+    $categories = get_the_category($project->ID);
+    if($categories) {
+	    foreach($categories as $category) {
+        $output .= '<a href="'.get_category_link( $category->term_id ).'" title="' . esc_attr($category->name) . '">'.$category->cat_name.'</a>'.',';
+      }
+    }
+    if( strlen(strip_tags($output)) > 35) {
+  	  $content.= '<div class="cover-fields" style="margin-right:10px;margin-left:5px;">';
+  	  $content.= '<div class="horizontal_scroller " id="horizontal_scroller'. $project->ID .'" >';
+  		$content.= '<div class="scrollingtext" id="scrollingtext'. $project->ID .'" >'. $output .'</div>';
+  	  $content.= '</div>';
+  	  $content.= '</div>';
+    } else {
+	    $content.= '<div class="cover-fields">'. substr($output,0,-1) .'</div>';
+    }
+
+
+    $project_viewer = get_post_meta($project->ID, "project_viewer", 'single');
+    $follow_count = $wpdb->get_results("select count(*) as cnt from " . $wpdb->prefix . "followers where post_id='".$project->ID."'");
+
+    $content.= '<div class="cover-stat-fields-wrap">';
+    $content.= '<div class="cover-stat-wrap">';
+    $content.= '<span class="cover-stat">';
+    $content.= '<span class="stat-label">';
+    $content.= '<img src="'.get_stylesheet_directory_uri().'/images/follow_icon3.png" />';
+    $content.= '</span>';
+    $content.= '<span class="stat-value">'. $follow_count[0]->cnt .'</span>';
+    $content.= '</span>';
+    $content.= '<span class="cover-stat">';
+    $content.= '<span class="stat-label"><img src="'.get_stylesheet_directory_uri().'/images/viewer.png" /></span>';
+    $content.= '<span class="stat-value">'. (($project_viewer!='') ? $project_viewer : '0') .'</span>';
+    $content.= '</span>';
+    $content.= '</div>';
+    $content.= '</div>';
+    $content.= '</div>';
+    $content.= '</div>';
+  }
+
+  //return $content;
+  /* $data['sql_query'] = $sql;
+  $data['sql_query_join'] = $sql_query_join;
+  $data['content'] = $content;
+  $data['paged'] = $paged;
+  $data['lpage'] = $last_page;
+  $data['qq'] = $sql_query;
+  $data['cc'] = count($results);
+
+  print json_encode($data);
+  die(); */
+  return $content;
+}
+//add_action("wp_ajax_appp_home_content", "appchild_load_home_content");
+add_shortcode("appp_home_content", "appchild_load_home_content");

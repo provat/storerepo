@@ -20,7 +20,6 @@
 <!--<![endif]-->
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title><?php wp_title( '|', true, 'right' ); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
@@ -61,27 +60,37 @@ jQuery(document).ready(function($) {
 						})
 			});
 
-
+			$('._42ft _4jy0 layerConfirm').click(function(){
+				alert("hellooo");
+			});
 		};
+
+
+
+
 
 	});
 </script>
 
-<!---search panel----->
+<!-- search panel -->
+
 <script type="text/javascript">
  var overlayClicked = function(event) {
 	jQuery(event.currentTarget).hide();
  };
  var searchFormClicked = function(event) {
 	event.stopPropagation();
- }; 
+ };
 	jQuery(document).ready(function($){
 		jQuery('.search_icon a').click(function(){
-			var html = jQuery('.codenegar_ajax_search_wrapper').html();
-			var overlay = jQuery('<div id="overlay" onclick="overlayClicked(event)"><div onclick="searchFormClicked(event)" class="popupContainer">'+html+'</div></div>');
-			overlay.appendTo(document.body)
+			//var html = jQuery('.codenegar_ajax_search_wrapper').html();
+			//var overlay = jQuery('<div id="overlay" onclick="overlayClicked(event)"><div onclick="searchFormClicked(event)" class="popupContainer">'+html+'</div></div>');
+			//overlay.appendTo(document.body)
+			jQuery("#overlay").css({'display' : 'block'});
+			jQuery(".codenegar_ajax_search_wrapper").css({'display' : 'block'});
+			jQuery(".search_rightarea").css({'display' : 'none'});
 		});
-		
+
 	});
 
 	jQuery(window).scroll(function () {
@@ -91,8 +100,37 @@ jQuery(document).ready(function($) {
 		jQuery('.header_bg1').addClass('tiny');
 	  }
 	});
+
+	jQuery(document).ready(function(){
+		var maxHeight = 0;
+			jQuery(".similar_project_area .s_project_list .project-cover").each(function(){
+			   if (jQuery(this).height() > maxHeight) { maxHeight = jQuery(this).height();
+                 }
+			});
+			jQuery(".similar_project_area .s_project_list .project-cover").height(maxHeight);
+	});
+
+	jQuery(document).ready(function(){
+		var maxHeight = 0;
+			jQuery(".portfolio_name").each(function(){
+			   if (jQuery(this).height() > maxHeight) { maxHeight = jQuery(this).height();
+                 }
+			});
+			jQuery(".portfolio_name").height(maxHeight);
+	});
+
+	jQuery(document).ready(function(){
+		var maxHeight = 0;
+			jQuery("#project_details_image_section_id .all-content-box .project-cover").each(function(){
+			   if (jQuery(this).height() > maxHeight) { maxHeight = jQuery(this).height();
+                 }
+			});
+			jQuery("#project_details_image_section_id .all-content-box .project-cover").height(maxHeight);
+	});
 </script>
-<!---search panel----->
+
+
+<!--- search panel ---->
 
 <!-- Mobile Menu Script-->
 <!--<script src="<?php bloginfo('stylesheet_directory'); ?>/js/jquery-1.9.min.js"></script>-->
@@ -149,10 +187,33 @@ function FacebookInviteFriends()
     });
 }
 </script>-->
+	<?php if(is_single()){?>
+    	<style type="text/css">
+			@media(max-device-width: 1024px){
+				.customsignin,
+				.customheader_bg3{
+					display:none;
+				}
+			}
+		</style>
+
+    <?php }
+    else
+    {
+        /*Cooe here*/
+    }
+    ?>
+<script type="text/javascript">
+window.pageId = '<?php echo $post->ID;?>';
+</script>
 </head>
 
 <body <?php body_class(); ?>>
-
+<div id="overlay" onclick="overlayClicked(event)" style="display: none;">
+  <div onclick="searchFormClicked(event)" class="popupContainer">
+  	<?php ajax_autosuggest_form(); ?>
+  </div>
+</div>
 <!--========================Header Start=====================-->
 <!--<div class="logopanel_right"> <a href="#" title="MENU" class="menu">MENU</a>
   <div class="mobile-menu dropmenu_area">
@@ -179,27 +240,30 @@ function FacebookInviteFriends()
                 </a>
             </div>
             <div class="logo"><a href="<?php bloginfo('url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/logo.png" alt="logo" /></a></div>
-			<div class="signin_area">
 
-        	<ul>
+
+
+            <div class="signin_area customsignin">
+
+            <ul>
                 <?php if ( is_user_logged_in() ) {
                     global $current_user;
                     get_currentuserinfo();
 
-		    $user = wp_get_current_user();
-		    $user_status = get_user_meta($user->ID, 'pw_user_status', 'true');
-		    ?>
+            $user = wp_get_current_user();
+            $user_status = get_user_meta($user->ID, 'pw_user_status', 'true');
+            ?>
                     <li class="sign_pop">
                         <div class="signin_popup">
                             <ul>
-                            	<?php /*?><li><a href="<?php echo get_permalink(get_ID('projects')); ?>">My Projects</a></li>
+                                <?php /*?><li><a href="<?php echo get_permalink(get_ID('projects')); ?>">My Projects</a></li>
                                 <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>">My Profile</a></li><?php */?>
                                 <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>">Followed Stores</a></li>
-                                <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>?mode=wishlist">My Wishlist</a></li>
+                                <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>?mode=wishlist" class="login-link">My Wishlist</a></li>
                                 <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>?mode=editprofile">Edit Profile</a></li>
-				<?php if($user_status == 'approved'){ ?>
+                <?php if($user_status == 'approved'){ ?>
                                 <li><a href="<?php echo get_permalink(get_ID('projects')); ?>">My Stores</a></li>
-				<?php } ?>
+                <?php } ?>
                             </ul>
                         </div>
                     <?php echo "Hi <span class='no_translate'>".$current_user->display_name."</span>"; ?>
@@ -211,9 +275,10 @@ function FacebookInviteFriends()
                    <li>
                     <a href="#" class="register-link">Sign Up</a> <?php if ( get_option('ajax_login_register_facebook') && get_option('users_can_register') ) : ?> <?php wp_nonce_field( 'login_submit', 'security_login' ); ?>
                         <a class="fb-login" href="#">
-                        	F Connect
-                        </a> 
-					<?php endif; ?>
+                        	<img src="<?php bloginfo('stylesheet_directory'); ?>/images/fb_icon.png" alt="facebookIconImg" />
+                            <span class="f_test" style="display:none;">F&nbsp;</span>Connect
+                        </a>
+                    <?php endif; ?>
                     </li>
                     <li><a href="#" class="login-link"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/login_icon.png" alt="login img" />Log In</a></li>
                    <?php } ?>
@@ -221,6 +286,7 @@ function FacebookInviteFriends()
 
             </ul>
         </div>
+
     <div class="clear"></div>
     </div>
 </div>
@@ -257,59 +323,102 @@ Facebook Invite Friends Link
         		<a href="#menu-right" name="menu-right" class="mobileMenu"></a>
                 <div id="menu-right">
 
-                    <ul>
+                  <ul>
+                    <?php
+            		    if ( is_user_logged_in() ) {
+                        global $current_user;
+                        get_currentuserinfo();
+                    ?>
+                    <li>
+                    <?php echo "<span class='no_translate'>".'HI '.$current_user->display_name.'</span>'; ?>
+                    </li>
+                    <?php }?>
+                  	<li>
+                      <a href="#" class="register-link">Sign Up</a> <?php if ( get_option('ajax_login_register_facebook') && get_option('users_can_register') ) : ?> <?php wp_nonce_field( 'login_submit', 'security_login' ); ?><a class="fb-login" href="#">F Connect</a> <?php endif; ?>
+                    </li>
 
-		    <?php if ( is_user_logged_in() ) {
-                    global $current_user;
-                    get_currentuserinfo();
+ 					<?php
+            		    if ( !is_user_logged_in() ) {
+            		 ?>
+            		    <li><a href="#" class="login-link"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/login_icon.png" alt="login img" />Log In</a></li>
+            		 <? } ?>
 
-		    $user = wp_get_current_user();
-		    $user_status = get_user_meta($user->ID, 'pw_user_status', 'true');
-		    ?>
+
+
+                    <li><a href="<?php bloginfo('url'); ?>">Discover Stores</a></li>
+                    <?php if(is_front_page()){ ?>
+              		    <li class="nearfriend"><a href="javascript: void(0);" onclick="javascript: getPosition('location');">Stores near me</a></li>
+              			<?php } else{ ?>
+              		        <li class="nearfriend"><a href="<?php echo bloginfo('url');?>?storenear=true">Stores near me</a></li>
+              			<?php } ?>
+              			<?php if ( is_user_logged_in() ) {?>
+                        <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>" class="followedStore">Followed Stores</a></li>
+                        <?php }else{?>
+                        <li><a href="#" class="login-link">Followed Stores</a></li>
+
+                        <?php } ?>
+                        <?php if ( is_user_logged_in() ) {?>
+                        	<li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>?mode=wishlist" class="myWishlist">My Wishlist</a></li>
+                        <?php }else{?>
+                        	<li><a href="#" class="login-link">My Wishlist</a></li>
+
+                        <?php } ?>
+		                <li class="invitefriend"><a class="fiblinkimage" title="Invite Friends" onclick="SCFacebookInviteFriends();" href="#">Invite Friends</a></li>
+              			<!--<li class="invitefriend">
+              			<div id="fb-root"></div>
+              			<a class="fiblinkimage" title="Invite Friends" href='#' onclick="FacebookInviteFriends();">
+              			Invite Friends
+              			</a>
+              			</li>-->
+
+
+                    <li><a href="<?php bloginfo('url'); ?>/get-the-apps/">Get The Apps</a></li>
+                    <li><a href="<?php bloginfo('url'); ?>/about-us/">About Us</a></li>
+                    <li><a href="<?php bloginfo('url'); ?>/advertise-here/">Advertise Here</a></li>
+                    <li><a href="<?php bloginfo('url'); ?>/terms-and-conditions/">Terms and Conditions</a></li>
+                    <li><a href="<?php bloginfo('url'); ?>/contact-us/">Contact Us</a></li>
+
+            		    <?php
+            		    if ( is_user_logged_in() ) {
+                        global $current_user;
+                        get_currentuserinfo();
+
+                		    $user = wp_get_current_user();
+                		    $user_status = get_user_meta($user->ID, 'pw_user_status', 'true');
+            		    ?>
                     <li class="sign_pop">
                         <div class="signin_popup">
                             <ul>
                             	<?php /*?><li><a href="<?php echo get_permalink(get_ID('projects')); ?>">My Projects</a></li>
                                 <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>">My Profile</a></li><?php */?>
                                 <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>">Followed Stores</a></li>
-                                <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>?mode=wishlist">My Wishlist</a></li>
+
                                 <li><a href="<?php echo get_permalink(get_ID('myprofile')); ?>?mode=editprofile">Edit Profile</a></li>
-				<?php if($user_status == 'approved'){ ?>
+				                      <?php if($user_status == 'approved'){ ?>
                                 <li><a href="<?php echo get_permalink(get_ID('projects')); ?>">My Stores</a></li>
-				<?php } ?>
+				                      <?php } ?>
                             </ul>
                         </div>
-                    <?php echo "Hi <span class='no_translate'>".$current_user->display_name.'</span>'; ?>
                     </li>
-                    <li><a href="<?php echo wp_logout_url( home_url() ); ?>" ><img src="<?php bloginfo('stylesheet_directory'); ?>/images/login_icon.png" alt="Logout" />Logout</a></li>
+                    <li><a href="<?php echo wp_logout_url( home_url() ); ?>" >Logout</a></li>
 
 
                     <?php }else{ ?>
-                   <li>
-                    <a href="#" class="register-link">Sign Up</a> <?php if ( get_option('ajax_login_register_facebook') && get_option('users_can_register') ) : ?> <?php wp_nonce_field( 'login_submit', 'security_login' ); ?><a class="fb-login" href="#"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/connect_img.jpg" alt="connect img" /></a> <?php endif; ?>
-                    </li>
-                    <li><a href="#" class="login-link"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/login_icon.png" alt="login img" />Log In</a></li>
+
                    <?php } ?>
 
-                      <li><a href="<?php bloginfo('url'); ?>">Discover</a></li>
-		        <li class="invitefriend"><a class="fiblinkimage" title="Invite Friends" onclick="SCFacebookInviteFriends();" href="#">Invite Friend</a></li>
-			<!--<li class="invitefriend">
-			<div id="fb-root"></div>
-			<a class="fiblinkimage" title="Invite Friends" href='#' onclick="FacebookInviteFriends();">
-			Invite Friends
-			</a>
-			</li>-->
-			<?php if(is_front_page()){ ?>
-		        <li class="nearfriend"><a href="javascript: void(0);" onclick="javascript: getPosition('location');">Stores near me</a></li>
-			<?php } else{ ?>
-		        <li class="nearfriend"><a href="<?php echo bloginfo('url');?>?storenear=true">Stores near me</a></li>
-			<?php } ?>
                     </ul>
                 </div>
             </div>
 <!-----------------------------------------mobile version---------------------------->
 
-<div class="header_bg3">
+<?php
+global $post;
+$this_page_id = $post->ID;
+$page_id = array(1307, 1309, 1311, 1313, 1315);
+if(!in_array($this_page_id, $page_id)) {?>
+<div class="header_bg3 customheader_bg3">
+
 	<div class="main_wrap">
 
 	<?php
@@ -571,6 +680,8 @@ function setSearchMode(val)
     <div class="clear"></div>
     </div>
 </div>
+<?php }?>
+
 <!-- </div> -->
 
 <!--========================Header End=====================-->

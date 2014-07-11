@@ -134,6 +134,7 @@ jQuery(function($){
 	});*/
 /*Several Address Starts*/
 $(document).on("click",".several_address", function(event){
+event.preventDefault();	
 var response = $('.main-div-several-address').html();
 //$('.main-div-several-address').css('display','block');
 console.log(response);
@@ -152,7 +153,7 @@ $(".map-hidden").each(function(index, value) {
 });
 var register_lat = $('.reg_geolocation').attr('data-lat');
 var register_long = $('.reg_geolocation').attr('data-long');
-//console.log(register_lat+"/"+register_long);
+console.log(register_lat+"/"+register_long);
 console.log(locations);
 function initializeMap()
 {
@@ -209,10 +210,13 @@ function initializeIpadMap()
 
                     google.maps.event.addListener(marker, 'click', (function(marker, i) {
                       return function() {
-                        infowindow.setContent(locations[i][0]);
+                        infowindow.setContent(locations[i][0].substring(0, 30)+"....");
                         infowindow.open(map, marker);
                       }
                     })(marker, i));
+					  google.maps.event.addDomListener(window, 'resize', function() {
+					    map.setCenter(myLatlng);
+					  });
                   }
 
 
@@ -227,6 +231,9 @@ function toggleBounce() {
     marker.setAnimation(google.maps.Animation.BOUNCE);
   }
 }
+
+
+
 /*Map Ends*/
 					
 /*Map Shows As Popup In Ipad Landscape */
@@ -250,26 +257,80 @@ function toggleBounce() {
 
 
     var isiPad = /ipad/i.test(navigator.userAgent.toLowerCase());
+    var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());    
+     var isiPhone = /iphone/i.test(navigator.userAgent.toLowerCase());
+     var isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
+
 		if (isiPad)
 		{
 			
 			$('.porfolio_map').css('display','none');
-			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>Click To View Map</span></a>");
+			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>See Map</span></a>");
 			$(document).on("click",".view_map", function(event){
-		      
+		      initializeIpadMap();
 		      $('.porfolio_map_ipad').css('display','block');
-		     // $('.view_map').colorbox({open:true, href:'div#mapIpad', inline:true,width:'450',height:'450',onCleanup:function(){
+		      $('.view_map').colorbox({open:false, href:'div#mapIpad', inline:true,width:'600',height:'400',onCleanup:function(){
                    
-		      	  $('.view_map').colorbox({inline:true, scroll:false,width:'350',height:'350', onComplete: function(){
-                   initializeIpadMap();
-                          }
-                      });
-
-
-                    $('.porfolio_map_ipad').css('display','none');
+                   // $('.porfolio_map_ipad').css('display','none');
                      //hides the content div when the lightbox closes
-                /* }});*/
+                 }});
 		    });
+			/* var response_map = $(".map_main").clone();
+     		$.colorbox({title:'Response',width:'700',height:'300',html:response_map}); 
+			$('.main-div-several-address').append("<span>"+response_map+"</span>");*/
+
+			$('.gm-style-iw').css({ "width": "300px", "min-height": "300"});			
+		}
+		else if (isiPod)
+		{
+			$('.porfolio_map').css('display','none');
+			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>See Map</span></a>");
+			$(document).on("click",".view_map", function(event){
+		      initializeIpadMap();
+		      $('.porfolio_map_ipad').css('display','block');
+		      $('.view_map').colorbox({open:false, href:'div#mapIpad', inline:true,width:'350',height:'300',onCleanup:function(){
+                   
+                   // $('.porfolio_map_ipad').css('display','none');
+                     //hides the content div when the lightbox closes
+                 }});
+		   });
+			/* var response_map = $(".map_main").clone();
+     		$.colorbox({title:'Response',width:'700',height:'300',html:response_map}); 
+			$('.main-div-several-address').append("<span>"+response_map+"</span>");*/
+		}
+		else if (isiPhone)
+		{
+			
+			$('.porfolio_map').css('display','none');
+			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>See Map</span></a>");
+			$(document).on("click",".view_map", function(event){
+		      initializeIpadMap();
+		      $('.porfolio_map_ipad').css('display','block');
+		      $('.view_map').colorbox({open:false, href:'div#mapIpad', inline:true,width:'350',height:'350',onCleanup:function(){
+                   
+                   // $('.porfolio_map_ipad').css('display','none');
+                     //hides the content div when the lightbox closes
+                 }});
+		   });
+			/* var response_map = $(".map_main").clone();
+     		$.colorbox({title:'Response',width:'700',height:'300',html:response_map}); 
+			$('.main-div-several-address').append("<span>"+response_map+"</span>");*/
+		}
+		else if (isAndroid)
+		{
+			
+			$('.porfolio_map').css('display','none');
+			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>See Map</span></a>");
+			$(document).on("click",".view_map", function(event){	
+		      initializeIpadMap();
+		      $('.porfolio_map_ipad').css('display','block');
+		      $('.view_map').colorbox({open:false, href:'div#mapIpad', inline:true,width:'350',height:'350',onCleanup:function(){
+                   
+                   // $('.porfolio_map_ipad').css('display','none');
+                     //hides the content div when the lightbox closes
+                 }});
+		   });
+		   /* });*/
 			/* var response_map = $(".map_main").clone();
      		$.colorbox({title:'Response',width:'700',height:'300',html:response_map}); 
 			$('.main-div-several-address').append("<span>"+response_map+"</span>");*/
@@ -277,11 +338,36 @@ function toggleBounce() {
 		else
 		{
 
-		//	$.colorbox({html:'<script src="http://maps.google.com/maps/api/js?sensor=false"></script><div class = "porfolio_map" id="map"></div>',width:'700',height:'250', onComplete: function() {
-         initializeMap();
-
+		/*$('.porfolio_map').css('display','none');
+			$('.map_popup').append("<a class = 'view_map' style = 'float:left'><span>Click To View Map</span></a>");
+			$(document).on("click",".view_map", function(event){
+		      initializeIpadMap();
+		      $('.porfolio_map_ipad').css('display','block');
+		      $('.view_map').colorbox({open:false, href:'div#mapIpad', inline:true,width:'600',height:'600',onCleanup:function(){
+                   
+                   // $('.porfolio_map_ipad').css('display','none');
+                     //hides the content div when the lightbox closes
+                 }});
+		   });*/
+		initializeMap();
 		}
 /*Map Shows As Popup In Ipad Landscape Ends*/
+
+/*		var maxHeight = 0;
+			jQuery(".panelImageMap").each(function(){
+			   if ($(this).height() > maxHeight) { maxHeight = $(this).height();
+                 }
+
+			});
+
+			jQuery(".panelImageMap").height(maxHeight);*/
+
+
+
+
+
+
+
 });	
 
 

@@ -130,14 +130,15 @@ get_header();
 
                         <a href="<?php echo get_permalink(get_ID('editor')); ?>">Create Project</a>
                     </div>
-                    
+                    <div class = "custom_project_external_cover">
                     
                     <?php
                     foreach($publish_draft_project_objs as $project) { 
                         //$GLOBALS['project']=$project_ob;
                         ?>
                     <div  id="project_cover<?php echo $project->ID; ?>" class="project_cover_hover_action">
-                      <span class = "project_status_label"><?php if ($project->post_status=='publish'){echo "Published";}else{echo "Saved";} ?></span>
+                        <span class = "project_status_label"><?php if ($project->post_status=='publish'){echo "Published";}else{echo "Saved";} ?></span>
+
                        <?php get_template_part("content", "project"); ?>
 
                         <div class="project_ediotor_menu_bar">
@@ -174,7 +175,7 @@ get_header();
                 echo do_shortcode('[my_project_list]');
 
                 ?>
-                    
+                </div> 
                 <div class="clear"></div>
                 </div>
             </div>

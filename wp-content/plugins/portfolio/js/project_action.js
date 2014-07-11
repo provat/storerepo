@@ -526,15 +526,22 @@ jQuery(function($){
  });   
     //crop cover image script end
    
-  var counter = 1;
-   var count_parent;
+        var counter;
+        stringId = '1/';
        $(document).on("click", ".add-more", function(event){
+
          event.preventDefault();
-         counter++;
+            var counterSplit = $('#backupID').attr('value');
+            Totlength = counterSplit.length;
+            console.log(Totlength);
+            counter = counterSplit.charAt(Totlength-2);
+            counter++;
+            stringId = $('#backupID').attr('value');
+            stringId = stringId + counter+"/";
 
           $(".address_dynamic:last").after($(".address_dynamic:first").clone(true));
           $(".address_dynamic:last .address-heading").html('---------------Branch Address ------------');
-          $(".child-btn:last").append("<div class = 'remove-child'>Remove Branch Address</div>");  
+          $(".child-btn:last").append("<div class = 'remove-child' data-counter = "+counter+">Remove Branch Address</div>");  
           $(".address_dynamic:last .project_country").attr('id','project_country'+counter);
           $(".address_dynamic:last .project_street").attr('id','project_street'+counter);
           $(".address_dynamic:last .project_state").attr('id','project_state'+counter);
@@ -545,14 +552,23 @@ jQuery(function($){
           $(".address_dynamic:last .project_state").val('');
           $(".address_dynamic:last .project_city").val('');
           $(".address_dynamic:last .project_zip").val('');
+
+          $('#backupID').val(stringId);
+
+
+
           });
        //  formation(counter);
       
     $(document).on("click", ".remove-child", function(event){
          event.preventDefault();
          if($(".address_dynamic").length!=1)
-      $(this).parent().parent().remove();
-      counter--;
+         var selId = $(this).attr('data-counter');
+        $(this).parent().parent().remove();
+         var oldString = $('#backupID').attr('value');
+         var newString = oldString.replace(selId+"/",'');
+           // console.log("Your Concat string id is" + stringId);
+          $('#backupID').val(newString);
      });
 
  // project settings form save
@@ -567,25 +583,26 @@ jQuery(function($){
       var project_description=$(".projects_settings_frms #project_description").val();
       var project_title=$("#project_title_hidden_record").val();
       var project_date = $(".projects_settings_frms #project_date").val();      
-     var project_country = '';
-     var project_street = '';
-     var project_state = '';
-     var project_city = '';
-     var project_zip = '';
-     console.log(counter_field);
-     /* if($(".address_dynamic").length==1)
+      var project_country = '';
+      var project_street = '';
+      var project_state = '';
+      var project_city = '';
+      var project_zip = '';
+      var splitString = $('#backupID').attr('value');
+      splitString = splitString.toString();
+      splitString = splitString.slice(0,-1);
+      var splitArray  = splitString.split("/");
+      var splitArrayUnique = $.unique(splitArray);     /* if($(".address_dynamic").length==1)
       {*/
 
      /* }*/
-      $(".address_dynamic").each(function(){
+      $.each(splitArray, function(index, value) {
 
-      project_country +=$(".projects_settings_frms #project_country"+counter_field).val()+"|";
-      project_street +=$(".projects_settings_frms #project_street"+counter_field).val()+"|";
-      project_state +=$(".projects_settings_frms #project_state"+counter_field).val()+"|";
-      project_city +=$(".projects_settings_frms #project_city"+counter_field).val()+"|";
-      project_zip +=$(".projects_settings_frms #project_zip"+counter_field).val()+"|";
-
-      counter_field++;
+      project_country +=$(".projects_settings_frms #project_country"+value).val()+"|";
+      project_street +=$(".projects_settings_frms #project_street"+value).val()+"|";
+      project_state +=$(".projects_settings_frms #project_state"+value).val()+"|";
+      project_city +=$(".projects_settings_frms #project_city"+value).val()+"|";
+      project_zip +=$(".projects_settings_frms #project_zip"+value).val()+"|";
      });  
 
       if($(".projects_settings_frms #country_all"+counter_field).attr('checked')) 

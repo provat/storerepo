@@ -1,7 +1,6 @@
 <?php
 global $project;
-
-//var_dump($project);
+global $distance;
 ?>
 <div class="project-cover" id="project_cover<?php echo $project->ID; ?>">
 
@@ -19,11 +18,10 @@ global $project;
 
   <div class="cover-info-stats">
     <div class="cover-info-home">
-
       <div class="cover-name">
         <a class="projectName cover-name-link" href="<?php echo get_permalink($project->ID); ?>">
-          <?php echo get_the_title($project->ID); ?>
-        </a>
+          <?php echo get_the_title($project->ID); ?></a>&nbsp;&nbsp;<?php  if(!empty($project->distance)){ $dis = round(($project->distance * 1.609),2); if($dis<1) { $dis = $dis * 1000; echo round(($dis),2)." "."Meters"; } else { echo round(($project->distance * 1.609),2)." "."KM"; } } ?>
+
       </div>
       <?php
       $post_date = get_post_meta($project->ID, 'project_date', true);
@@ -37,7 +35,7 @@ global $project;
       $sql = "SELECT city FROM {$wpdb->prefix}project_multiple_address WHERE project_id=$project->ID";
       $row = $wpdb->get_row($sql);
       ?>
-      <div class="cover-by-wrap">
+     <div class="cover-by-wrap">
         <div class="cover-by">
           <?php
           if($is_multiple_address == 'Y')

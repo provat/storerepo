@@ -64,7 +64,7 @@ Class DisplayProjects {
         $objlocation = getlatlang($ip);
         $latitude = $objlocation->lat;
         $longitude = $objlocation->lng; */
-        $range = 1000;
+   /*     $range = 1000;
 
         $lat_range = $range/69.172;
         $lon_range = abs($range/(cos($latitude) * 69.172));
@@ -72,20 +72,29 @@ Class DisplayProjects {
         $min_lat = number_format($latitude - $lat_range, "4", ".", "");
         $max_lat = number_format($latitude + $lat_range, "4", ".", "");
         $min_lon = number_format($longitude - $lon_range, "4", ".", "");
-        $max_lon = number_format($longitude + $lon_range, "4", ".", "");
+        $max_lon = number_format($longitude + $lon_range, "4", ".", "");*/
 
-        $sql = "SELECT project_id,zip,lat,lon,( 3959 * acos( cos( radians(42.290763) ) * cos( radians(lat)) * cos( radians(lon) - radians(-71.35368) ) + sin( radians(42.90763))  * sin( radians( lat ) ) ) ) AS distance FROM wp_project_multiple_address WHERE lat BETWEEN $min_lat AND $max_lat ";
-        $sql.= "AND lon BETWEEN $min_lon AND $max_lon ORDER BY distance ASC";
+
+$lon = $longitude;
+$lat = $latitude;
+$distance = 20;
+
+
+
+
+        $sql = "SELECT project_id,zip,lat,lon,( 3959 * acos( cos( radians('$lat') ) * cos( radians( lat ) ) * cos( radians( lon ) - radians('$lon') ) + sin( radians('$lat') ) * sin( radians( lat ) ) ) ) AS distance FROM wp_project_multiple_address ";
+        $sql.= " having distance<='$distance' ORDER BY distance ASC LIMIT 0, 10";
         $rows = $wpdb->get_results($sql);
         $ids = array();
         if(count($rows) > 0) {
           foreach($rows as $r => $row) {
             $ids[] = $row->project_id;
+            $GLOBALS['distance'][$row->project_id]=$row;
           }
           $ids = implode(",", $ids);
 
-          $sql_query_join = "SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE ID IN($ids) AND ";
-          $sql_query_join.= "post_status = 'publish' LIMIT ".$offset." ,".$post_per_page;
+          $sql_query_join = "SELECT ID, latitude, longitude, ( 3959 * acos( cos( radians('$lat') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('$lon') ) + sin( radians('$lat') ) * sin( radians( latitude ) ) ) ) AS distance FROM ".$wpdb->prefix."posts WHERE ID in ($ids)";
+          $sql_query_join.= " AND post_status = 'publish' order by distance asc LIMIT ".$offset." ,".$post_per_page;
 
         } else {
           $sql_query_join = " SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
@@ -110,6 +119,7 @@ Class DisplayProjects {
       }
 
       $data['sql_query'] = $sql;
+      $data['sql_query_join'] = $sql_query_join;
       $data['content'] = ob_get_contents();
       $data['paged'] = $paged;
       $data['lpage'] = $last_page;

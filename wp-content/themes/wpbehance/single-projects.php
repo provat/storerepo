@@ -158,6 +158,7 @@ function make_tag_list($tag_name, $project_id) {
 ?>
 
 <?php wp_nonce_field( 'followers', 'security' ); ?>
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <input type="hidden" name="hdnPath" id="hdnPath" value="<?php echo FOLLOWERS_PLUGIN_URL; ?>" />
 <input type="hidden" name="hdnPostId" id="hdnPostId" value="<?php echo $post_id; ?>" />
 <input type="hidden" name="hdnUserId" id="hdnUserId" value="<?php echo $user_id; ?>" />
@@ -203,6 +204,7 @@ function make_tag_list($tag_name, $project_id) {
 
                             </div>
                        <div class="clear"></div>
+
                         </div>
 						            <?php  if($user_id){ ?>
                         <div class="potfolio_follow">
@@ -279,7 +281,7 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
 
 
                 <div class="clear"></div>
-                <div>
+                <div class="locationMapViewPanel">
 
                 <?php if(has_post_thumbnail( $project_id )){
 
@@ -308,8 +310,8 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                 <div class = "main-div-several-address">
                   <?php
                       if(!empty($project_child_addr)){
-                        echo "<h2 class = 'several-address-heading'>List Of Branch Address</h2><br><br>";
-                        $click_here = "Click Here";
+                        echo "<h2 class = 'several-address-heading'>Store Locations</h2>";
+                        $click_here = " Click here for a list of all store locations";
                       }else{
                           //echo "<h2 class = 'several-address-no-found follow_area' style = 'margin-top: 225px;text-align: center;color: red;'>Branch Address Not Found</h2><br><br>";
                           $click_here = "";
@@ -318,29 +320,36 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
 
                 <?php
               foreach ($project_child_addr as $project_child_addr_key => $project_child_addr_value) {?>
-                      <div class = "follow_area several_address_param" style = "float: left;width: 50%;">
+                      <div class = "follow_area several_address_param" style = "">
 
-                      <label for = "Street Address"><strong>Street Address</strong><span class = "several-address-description"><?php echo $project_multiple_value->street_address ?></span><br><hr>
-                      <label for = "Country"><strong>Country</strong><span class = "several-address-description"><?php echo $project_multiple_value->country ?></span><br><hr>
+                      <label for = "Address"><span class = "several-address-description"><?php echo $project_child_addr_value->street_address.",".$project_child_addr_value->city.",".$project_child_addr_value->zip.",".$project_child_addr_value->state.",".$project_child_addr_value->country ?></span>
+                     <!--  <label for = "Country"><strong>Country</strong><span class = "several-address-description"><?php echo $project_multiple_value->country ?></span><br><hr>
                       <label for = "State"><strong>State</strong><span class = "several-address-description"><?php echo $project_multiple_value->state ?></span> <br> <hr>
                       <label for = "City"><strong>City</strong><span class = "several-address-description"><?php echo $project_multiple_value->city ?></span> <br>  <hr>
                       <label for = "Zip"><strong>Zip</strong><span class = "several-address-description"><?php echo $project_multiple_value->zip ?></span>  <br>
-
+ -->
                       </div>
                 <? } ?>
                 </div>
                 <!-- Viewing Several Addresses -->
 
-                <div class="portfolio_banner"><img src="<?php echo $src[0]; ?>" alt="img" /></div>
-                <!-- <div class = "porfolio_map" id = "map-canvas"></div> -->
-                <div></div>
-                  <div class = "follow_area map_reg_pc" style = "float: left;margin-bottom: 18px;margin-left: 40px;width: 49%;"><span><?php echo $project_reg_addr[0]->street_address ?>&nbsp;&nbsp;<a class = "several_address"><span><?php echo $click_here; ?></span></a></div>
-                  <div class = "porfolio_map" id="map" style="height: 297px!important;">
-                  <div class = "map_reg" style = "float: left;margin-bottom: 18px;margin-left: 40px;width: 49%;"><span><?php echo $project_reg_addr[0]->street_address ?>&nbsp;&nbsp;<a class = "several_address"><span><?php echo $click_here; ?></span></a></div>
-                  <div class = "porfolio_map_ipad" id="mapIpad" style="width:100%;height: 100%!important;">
+                <!-- start map image panel view -->
+                <div class="panelImageMap">
+                  <div class="portfolio_banner"><img src="<?php echo $src[0]; ?>" alt="img" /></div>
+                  <!-- <div class = "porfolio_map" id = "map-canvas"></div> -->
+                  <div></div>
 
+                  <div class="mapLocationDescriptionPanel">
+                  	<div class = "follow_area map_reg_pc mapHeadingArea"><span><?php echo $project_reg_addr[0]->street_address.",".$project_reg_addr[0]->city.",".$project_reg_addr[0]->zip.",".$project_reg_addr[0]->state ?>&nbsp;&nbsp;<a href = "javascript:void(0)" class = "several_address"><span><?php echo $click_here; ?></span></a></div>
+                  	<div class = "porfolio_map" id="map" style="height: 311px!important;"></div>
+                  </div>
                 </div>
-                <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+                <!-- end map image panel view -->
+
+                   <div class = "map_popup"></div>
+                  <div class = "porfolio_map_ipad" id="mapIpad" style="width:100%;height: 100%!important;">
+                </div>
+
 
 
                 <script type="text/javascript">
@@ -389,9 +398,6 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
 
 
 
-
-
-                </div>
                 <div class="clear"></div>
                 <input type="hidden" name="details_page_project_id" id="details_page_project_id" value="<?php echo $project_id; ?>">
                 <div class="image_filter_area" id="image_filter_area_id">

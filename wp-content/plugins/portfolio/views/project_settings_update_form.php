@@ -76,8 +76,8 @@ $project_id=$_REQUEST['project_id'];
       <br>
   </div>
   </div>
-  <input type = "hidden" class = "count_div">
-  <input type = "hidden" class = "formation_id">
+        <input type = "hidden" id = "backupID" value = "1/" />
+
  
 </div>
 
