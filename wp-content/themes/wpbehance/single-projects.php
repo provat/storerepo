@@ -204,7 +204,11 @@ function make_tag_list($tag_name, $project_id) {
 
                             </div>
                        <div class="clear"></div>
+<<<<<<< HEAD
 
+=======
+                       
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
                         </div>
 						            <?php  if($user_id){ ?>
                         <div class="potfolio_follow">
@@ -317,6 +321,7 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                           $click_here = "";
                       }
                    ?>
+<<<<<<< HEAD
 
                 <?php
               foreach ($project_child_addr as $project_child_addr_key => $project_child_addr_value) {?>
@@ -350,6 +355,41 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
                   <div class = "porfolio_map_ipad" id="mapIpad" style="width:100%;height: 100%!important;">
                 </div>
 
+=======
+
+                <?php
+              foreach ($project_child_addr as $project_child_addr_key => $project_child_addr_value) {?>
+                      <div class = "follow_area several_address_param" style = "">
+
+                      <label for = "Address"><span class = "several-address-description"><?php echo $project_child_addr_value->street_address.",".$project_child_addr_value->city.",".$project_child_addr_value->zip.",".$project_child_addr_value->state.",".$project_child_addr_value->country ?></span>
+                     <!--  <label for = "Country"><strong>Country</strong><span class = "several-address-description"><?php echo $project_multiple_value->country ?></span><br><hr>
+                      <label for = "State"><strong>State</strong><span class = "several-address-description"><?php echo $project_multiple_value->state ?></span> <br> <hr>
+                      <label for = "City"><strong>City</strong><span class = "several-address-description"><?php echo $project_multiple_value->city ?></span> <br>  <hr>
+                      <label for = "Zip"><strong>Zip</strong><span class = "several-address-description"><?php echo $project_multiple_value->zip ?></span>  <br>
+ -->
+                      </div>
+                <? } ?>
+                </div>
+                <!-- Viewing Several Addresses -->
+				
+                <!-- start map image panel view -->
+                <div class="panelImageMap">
+                  <div class="portfolio_banner"><img src="<?php echo $src[0]; ?>" alt="img" /></div>
+                  <!-- <div class = "porfolio_map" id = "map-canvas"></div> -->
+                  <div></div>
+                  
+                  <div class="mapLocationDescriptionPanel">
+                  	<div class = "follow_area map_reg_pc mapHeadingArea"><span><?php echo $project_reg_addr[0]->street_address.",".$project_reg_addr[0]->city.",".$project_reg_addr[0]->zip.",".$project_reg_addr[0]->state ?>&nbsp;&nbsp;<a href = "javascript:void(0)" class = "several_address"><span><?php echo $click_here; ?></span></a></div>
+                  	<div class = "porfolio_map" id="map" style="height: 311px!important;"></div>
+                  </div>
+                </div>
+                <!-- end map image panel view -->
+                 
+                   <div class = "map_popup"></div>
+                  <div class = "porfolio_map_ipad" id="mapIpad" style="width:100%;height: 100%!important;">
+                </div>
+                 
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
 
                 <script type="text/javascript">

@@ -7,6 +7,7 @@ Version: 1.0.0
 Author: Ankan
 Author URI: http://ankan.com/
 */
+
 require_once 'inc/function.php';
 //require_once 'controllers/geoplugin.class.php';
 require_once 'controllers/upload.php';
@@ -37,8 +38,13 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
 
     if (is_user_logged_in() ) {
     wp_register_script('jquery_ui_core',$plugins_url."/js/jquery-ui-core.js");
+<<<<<<< HEAD
 
 
+=======
+   
+   
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
     wp_register_script( "project_action",$plugins_url.'/js/project_action.js');
 
     wp_register_script( "crop_image_plugin",$plugins_url.'/js/jquery.imgareaselect.pack.js');
@@ -54,6 +60,7 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
     wp_register_script( "jquery_dropdown",$plugins_url.'/js/chosen.jquery.js',false,false,true );
     wp_register_script( "jquery_tag_it",$plugins_url.'/js/tag-it.js',false,false,true );
     wp_register_script( "dropdown_config",$plugins_url.'/js/dropdown_config.js',false,false,true );
+<<<<<<< HEAD
     wp_enqueue_style( 'upd_css',$plugins_url.'/css/style.css' );
     wp_enqueue_style( 'crop_css',$plugins_url.'/css/imgareaselect-default.css' );
     wp_enqueue_style( 'choosen_dropdown_css',$plugins_url.'/css/chosen.css' );
@@ -72,22 +79,49 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
 		wp_enqueue_script('myall2_plugins');
 		wp_enqueue_script('myall3_plugins');
 		wp_enqueue_script('crop_image_plugin');
+=======
+    wp_enqueue_style( 'upd_css',$plugins_url.'/css/style.css' ); 
+    wp_enqueue_style( 'crop_css',$plugins_url.'/css/imgareaselect-default.css' ); 
+    wp_enqueue_style( 'choosen_dropdown_css',$plugins_url.'/css/chosen.css' ); 
+    wp_enqueue_style( 'tag_it_css',$plugins_url.'/css/jquery.tagit.css' ); 
+    wp_enqueue_style( 'tag_it_css_jq',$plugins_url.'/css/tagit.ui-zendesk.css' ); 
+    wp_enqueue_style( 'jquery-ui',$plugins_url.'/css/jquery-ui.css' ); 
 
-		wp_enqueue_script('toolbar_action');
+        wp_enqueue_script( 'wp_ajax_url' );
+    
+      if(!is_admin()){
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script( 'jquery_ui' );
+    //wp_enqueue_script( 'jquery_ui_core' );
+    wp_enqueue_script('cus_themes');
+    wp_enqueue_script('myall_plugins');
+    wp_enqueue_script('myall2_plugins');
+    wp_enqueue_script('myall3_plugins');
+    wp_enqueue_script('crop_image_plugin');
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
-		wp_enqueue_script('jquery_tag_it');
-		wp_enqueue_script('toolbar_action_patch');
-		wp_enqueue_script('myall4_plugins');
+    wp_enqueue_script('toolbar_action');
 
-		wp_enqueue_script('image_replace');
+    wp_enqueue_script('jquery_tag_it');
+    wp_enqueue_script('toolbar_action_patch');
+    wp_enqueue_script('myall4_plugins');
 
-		wp_enqueue_script('jquery_dropdown');
-		wp_enqueue_script('dropdown_config');
+    wp_enqueue_script('image_replace');
 
+    wp_enqueue_script('jquery_dropdown');
+    wp_enqueue_script('dropdown_config');
+
+<<<<<<< HEAD
 		wp_enqueue_script('project_action');
 
 
 	  }
+=======
+    wp_enqueue_script('project_action');
+
+
+    }
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
    }
 }

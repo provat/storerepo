@@ -75,9 +75,15 @@ Class DisplayProjects {
         $max_lon = number_format($longitude + $lon_range, "4", ".", "");*/
 
 
+<<<<<<< HEAD
 $lon = $longitude;
 $lat = $latitude;
 $distance = 20;
+=======
+        $lon = $longitude;
+        $lat = $latitude;
+        $distance = 20;
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
 
 

@@ -14,10 +14,36 @@
 <script type="text/javascript">
 window.pageId = '<?php echo $post->ID;?>';
 </script>
+<<<<<<< HEAD
 </head>
 
 <body <?php body_class(); ?>>
 
+=======
+<!-- Invite Friends -->
+<script src = "http://connect.facebook.net/en_US/all.js"></script>
+
+<script type="text/javascript">
+	FB.init({ 
+       appId:'731511263580569', cookie:true, 
+       status:true, xfbml:true 
+    });
+
+     
+
+function FacebookInviteFriends() 
+{
+FB.ui({ method: 'apprequests', 
+   message: 'My diaolog...'});
+}
+</script>
+<!-- Invite Friends -->
+
+</head>
+
+<body <?php body_class(); ?>>
+<div class="ajax-spinner" style="display: none;"><i class="fa fa-spinner fa-spin fa-3x"></i></div>
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 <div id="body-container">
 
 <section class="snap-drawer">
@@ -37,52 +63,92 @@ window.pageId = '<?php echo $post->ID;?>';
 
 
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large ajaxify" href="#">
+=======
+	    <a class="btn btn-success btn-large ajaxify portfolio" data-pageid="1" href="#">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Discover Srores', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax store-near-me" href="#" data-storeid="12">
+=======
+	    <a class="btn btn-success btn-large noajax store-near-me" href="#" data-pageid="2">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Stores Near Me', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax followed-stores" href="#" data-pageid="3">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Followed Stores', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax wishlist" href="#" data-pageid="4">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'My Wishlist', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax" href="#" onclick="FacebookInviteFriends();" >
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Invite Friends', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax get-the-apps" href="#" data-pageid="6">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Get The Apps', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax about-us" href="#" data-pageid="7">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'About Us', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax io-modal-open" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax io-modal-open advertise-here" href="#" data-pageid="8">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Advertise Here', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax io-modal-open" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax io-modal-open terms-and-conditions" href="#" data-pageid="9">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Terms And Conditions', 'apptheme' ); ?>
 	    </a>
 	  </div>
 	  <div class="log-out-button">
+<<<<<<< HEAD
 	    <a class="btn btn-success btn-large noajax io-modal-open" href="#">
+=======
+	    <a class="btn btn-success btn-large noajax io-modal-open contact-us" href="#" data-pageid="10">
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 	    <?php _e( 'Contact Us', 'apptheme' ); ?>
 	    </a>
 	  </div>

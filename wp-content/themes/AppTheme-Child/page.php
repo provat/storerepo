@@ -15,7 +15,11 @@ appp_title_header(); ?>
 
 <div id="content" class="site-content" role="main">
 
+<<<<<<< HEAD
 	<?php while ( have_posts() ) : the_post(); ?>
+=======
+	<?php //while ( have_posts() ) : the_post(); ?>
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
 		<?php //get_template_part( 'content', 'page' ); ?>
 
@@ -24,6 +28,7 @@ appp_title_header(); ?>
 			//if ( comments_open() || '0' != get_comments_number() )
 				//comments_template();
 		?>
+<<<<<<< HEAD
 		<?php
 		if(is_home() || is_front_page()) {
 		?>
@@ -36,6 +41,10 @@ appp_title_header(); ?>
     <?php }?>
 
 	<?php endwhile; // end of the loop. ?>
+=======
+
+	<?php //endwhile; // end of the loop. ?>
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
 </div><!-- #content -->
 

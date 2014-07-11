@@ -26,7 +26,11 @@ appp_title_header(); ?>
 		?>
 
 	<?php endwhile; // end of the loop. ?>
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 </div><!-- #content -->
 
 <?php get_footer(); ?>

@@ -1,0 +1,62 @@
+.mfp-s-loading .mfp-arrow { 
+   display: none;
+}
+
+.white-popup {
+  position: relative;
+  background: #FFF;
+/*  padding: 20px;*/
+  width: auto;
+/*  max-width: 1000px;*/
+  /*margin: 5px auto;*/
+  padding:20px 10px;
+  overflow:hidden;
+}
+.clasa{ float:left; height:440px; width:74%; text-align:center; position:relative; display: table; overflow:hidden;}
+.clasa_semantic {display: table-cell;text-align: center;vertical-align: middle; width:500px !important;}
+
+
+.clasa img{ position:relative; max-width:100%; max-height:420px;text-align: center;}
+.clasb{ float:right; width:24%; line-height:18px;}
+.clear { clear:both;}
+
+
+
+
+#lb_msg {
+    clear: both;
+    display: block;
+	padding-top:10px;
+}
+.clasb .buy_now_stats { margin:10px 0;}
+
+
+
+@media(max-width: 1024px){
+  .clasa{ float:none; width:100%;}
+  .clasb{ float:none; width:96%; margin:2%;}
+    .mfp-arrow-right { right: 0; }
+  .mfp-arrow { margin:-15% 0 0 !important;}
+       
+}
+@media(max-width: 768px){
+  .clasa{ float:none; width:100%;}
+  .clasb{ float:none; width:96%; margin:2%;}
+  .mfp-arrow-right { right: 0; }
+  .mfp-arrow { margin:-15% 0 0 !important;}
+  .clasa img { max-height: 322px;}
+       
+}
+@media(max-width: 660px){
+  .clasa{ float:none; width:100%;}
+  .clasb{ float:none; width:96%; margin:2%;}
+  .mfp-arrow-right {  right: 0; }  
+  .mfp-arrow { margin:-45% 0 0 !important;}     
+}
+
+@media(max-width: 500px){
+  .clasa{ float:none; width:100%;}
+  .clasb{ float:none; width:96%; margin:2%;}
+  .mfp-arrow-right {  right: 0; }    
+  .mfp-arrow { margin:-50% 0 0 !important;}
+}

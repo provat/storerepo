@@ -61,7 +61,11 @@ jQuery(document).ready(function($) {
 			});
 
 			$('._42ft _4jy0 layerConfirm').click(function(){
+<<<<<<< HEAD
 				alert("hellooo");
+=======
+
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 			});
 		};
 
@@ -69,6 +73,7 @@ jQuery(document).ready(function($) {
 
 
 
+<<<<<<< HEAD
 	});
 </script>
 
@@ -129,6 +134,68 @@ jQuery(document).ready(function($) {
 	});
 </script>
 
+=======
+	});
+</script>
+
+<!-- search panel -->
+
+<script type="text/javascript">
+ var overlayClicked = function(event) {
+	jQuery(event.currentTarget).hide();
+ };
+ var searchFormClicked = function(event) {
+	event.stopPropagation();
+ };
+	jQuery(document).ready(function($){
+		jQuery('.search_icon a').click(function(){
+			//var html = jQuery('.codenegar_ajax_search_wrapper').html();
+			//var overlay = jQuery('<div id="overlay" onclick="overlayClicked(event)"><div onclick="searchFormClicked(event)" class="popupContainer">'+html+'</div></div>');
+			//overlay.appendTo(document.body)
+			jQuery("#overlay").css({'display' : 'block'});
+			jQuery(".codenegar_ajax_search_wrapper").css({'display' : 'block'});
+			jQuery(".search_rightarea").css({'display' : 'none'});
+		});
+
+	});
+
+	jQuery(window).scroll(function () {
+	  if (jQuery(document).scrollTop() == 0) {
+		jQuery('.header_bg1').removeClass('tiny');
+	  } else {
+		jQuery('.header_bg1').addClass('tiny');
+	  }
+	});
+
+	jQuery(document).ready(function(){
+		var maxHeight = 0;
+			jQuery(".similar_project_area .s_project_list .project-cover").each(function(){
+			   if (jQuery(this).height() > maxHeight) { maxHeight = jQuery(this).height();
+                 }
+			});
+			jQuery(".similar_project_area .s_project_list .project-cover").height(maxHeight);
+	});
+
+	jQuery(document).ready(function(){
+		var maxHeight = 0;
+			jQuery(".portfolio_name").each(function(){
+			   if (jQuery(this).height() > maxHeight) { maxHeight = jQuery(this).height();
+                 }
+			});
+			jQuery(".portfolio_name").height(maxHeight);
+	});
+
+	jQuery(document).ready(function(){
+		var maxHeight = 0;
+			jQuery("#project_details_image_section_id .all-content-box .project-cover").each(function(){
+			   if (jQuery(this).height() > maxHeight) { maxHeight = jQuery(this).height();
+                 }
+			});
+			jQuery("#project_details_image_section_id .all-content-box .project-cover").height(maxHeight);
+	});
+</script>
+
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 
 <!--- search panel ---->
 
@@ -203,9 +270,13 @@ function FacebookInviteFriends()
         /*Cooe here*/
     }
     ?>
+<<<<<<< HEAD
 <script type="text/javascript">
 window.pageId = '<?php echo $post->ID;?>';
 </script>
+=======
+
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
 </head>
 
 <body <?php body_class(); ?>>

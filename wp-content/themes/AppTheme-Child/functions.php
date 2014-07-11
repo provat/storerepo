@@ -36,6 +36,7 @@ add_action( 'after_setup_theme', 'prefix_appp_remove_search' );
 
 	return $template;
 }
+<<<<<<< HEAD
 add_filter( 'template_include', 'appp_custom_template_include' ); */
 
 
@@ -95,3 +96,6 @@ function display_limited_words_with_formatting($str = '', $string_length = 0) {
 
   return trim($final_str);
 }
+=======
+add_filter( 'template_include', 'appp_custom_template_include' ); */
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20

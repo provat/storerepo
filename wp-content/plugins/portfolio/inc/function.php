@@ -247,11 +247,16 @@ function getlatlang($location)
 if (!function_exists('df_disable_admin_bar')) {
 
   function df_disable_admin_bar() {
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
     // for the admin page
     remove_action('admin_footer', 'wp_admin_bar_render', 1000);
     // for the front-end
     remove_action('wp_footer', 'wp_admin_bar_render', 1000);
+<<<<<<< HEAD
 
     // css override for the admin page
     function remove_admin_bar_style_backend() {
@@ -259,6 +264,15 @@ if (!function_exists('df_disable_admin_bar')) {
     }
     add_filter('admin_head','remove_admin_bar_style_backend');
 
+=======
+      
+    // css override for the admin page
+    function remove_admin_bar_style_backend() { 
+      echo '<style>body.admin-bar #wpcontent, body.admin-bar #adminmenu { padding-top: 0px !important; }</style>';
+    }   
+    add_filter('admin_head','remove_admin_bar_style_backend');
+    
+>>>>>>> 82cd3fc7d9304a6e84e7c4e399d355ffda47cd20
     // css override for the frontend
     function remove_admin_bar_style_frontend() {
       echo '<style type="text/css" media="screen">
