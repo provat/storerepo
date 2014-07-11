@@ -7,6 +7,7 @@ Version: 1.0.0
 Author: Ankan
 Author URI: http://ankan.com/
 */
+
 require_once 'inc/function.php';
 //require_once 'controllers/geoplugin.class.php';
 require_once 'controllers/upload.php';
@@ -37,7 +38,7 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
 
     if (is_user_logged_in() ) {
     wp_register_script('jquery_ui_core',$plugins_url."/js/jquery-ui-core.js");
-    
+   
    
     wp_register_script( "project_action",$plugins_url.'/js/project_action.js');
     
@@ -59,33 +60,35 @@ function addall_portfolio_imageUpload_JS_enqueuer() {
     wp_enqueue_style( 'choosen_dropdown_css',$plugins_url.'/css/chosen.css' ); 
     wp_enqueue_style( 'tag_it_css',$plugins_url.'/css/jquery.tagit.css' ); 
     wp_enqueue_style( 'tag_it_css_jq',$plugins_url.'/css/tagit.ui-zendesk.css' ); 
-   
+    wp_enqueue_style( 'jquery-ui',$plugins_url.'/css/jquery-ui.css' ); 
 
         wp_enqueue_script( 'wp_ajax_url' );
     
-	    if(!is_admin()){
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'jquery_ui' );
-		//wp_enqueue_script( 'jquery_ui_core' );
-		wp_enqueue_script('cus_themes');
-		wp_enqueue_script('myall_plugins');
-		wp_enqueue_script('myall2_plugins');
-		wp_enqueue_script('myall3_plugins');
-		wp_enqueue_script('crop_image_plugin');
+      if(!is_admin()){
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script( 'jquery_ui' );
+    //wp_enqueue_script( 'jquery_ui_core' );
+    wp_enqueue_script('cus_themes');
+    wp_enqueue_script('myall_plugins');
+    wp_enqueue_script('myall2_plugins');
+    wp_enqueue_script('myall3_plugins');
+    wp_enqueue_script('crop_image_plugin');
 
-		wp_enqueue_script('toolbar_action');
+    wp_enqueue_script('toolbar_action');
 
-		wp_enqueue_script('jquery_tag_it');
-		wp_enqueue_script('toolbar_action_patch');
-		wp_enqueue_script('myall4_plugins');
+    wp_enqueue_script('jquery_tag_it');
+    wp_enqueue_script('toolbar_action_patch');
+    wp_enqueue_script('myall4_plugins');
 
-		wp_enqueue_script('image_replace');
+    wp_enqueue_script('image_replace');
 
-		wp_enqueue_script('jquery_dropdown');
-		wp_enqueue_script('dropdown_config');
+    wp_enqueue_script('jquery_dropdown');
+    wp_enqueue_script('dropdown_config');
 
-		wp_enqueue_script('project_action');
-	  }
+    wp_enqueue_script('project_action');
+
+
+    }
 
    } 
 }

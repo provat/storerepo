@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Markup needed for jQuery UI dialog, our form is actually loaded via AJAX
+ */
+
+?>
+<div id="continu_project_dialog" class="continu_project_dialog"  data-security="<?php print wp_create_nonce( 'continu_project_dialog' ); ?>">
+    
+</div>

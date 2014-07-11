@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) exit('No direct script access allowed');
  * @version    	1.8
  */
  
-function ajax_autosuggest_form(){
+function ajax_autosuggest_form(){ 
 	echo do_shortcode('[ajax_autosuggest_form]');
 }
 
@@ -31,13 +31,48 @@ function codenegar_posts_search($search, &$wp_query, $seach_comments=true, $sear
     }
     
     $search = '';
+    $search_mode = $_SESSION['search_mode'];
     foreach( $words as $word ) {
         // %word% to search all phrases that contain 'word'
         $word = '%' . $word . '%';
-        $sql = " AND ((wp_posts.post_title LIKE '%s') OR (wp_posts.post_content LIKE '%s')";
-        // Prevent SQL injection
-        $sql = $wpdb->prepare($sql, $word, $word);
-        $search .= $sql;
+
+	if($search_mode=='All' || $search_mode=='')
+	{
+		$sql = " AND (wp_posts.post_excerpt LIKE '%s') AND (wp_posts.post_type ='attachment')";
+		// Prevent SQL injection
+		$sql = $wpdb->prepare($sql, $word, $word);
+		$search .= $sql;
+	
+
+		$sql = "  OR ((wp_posts.post_type ='projects') AND (wp_posts.post_title LIKE '%s')";
+		// Prevent SQL injection
+		$sql = $wpdb->prepare($sql, $word, $word);
+		$search .= $sql;
+	}
+	else if($search_mode=='Store')
+	{
+		$sql = " AND (wp_posts.post_type = 'projects')";
+		// Prevent SQL injection
+		$sql = $wpdb->prepare($sql, $word, $word);
+		$search .= $sql;
+
+		$sql = " AND ((wp_posts.post_title LIKE '%s')";
+		// Prevent SQL injection
+		$sql = $wpdb->prepare($sql, $word, $word);
+		$search .= $sql;
+	}
+	else{
+		$sql = " AND (wp_posts.post_excerpt LIKE '%s')  AND (wp_posts.post_type = 'attachment')";
+		// Prevent SQL injection
+		$sql = $wpdb->prepare($sql, $word, $word);
+		$search .= $sql;
+	
+
+		$sql = " OR ((wp_posts.post_type = 'attachment') AND (wp_posts.post_title LIKE '%s')";
+		// Prevent SQL injection
+		$sql = $wpdb->prepare($sql, $word, $word);
+		$search .= $sql;
+	}
             
         if($seach_comments){
             $sql = " OR EXISTS ( SELECT * FROM wp_comments WHERE comment_post_ID = wp_posts.ID AND comment_content LIKE '%s' )";
@@ -60,6 +95,7 @@ function codenegar_posts_search($search, &$wp_query, $seach_comments=true, $sear
             $sql = $wpdb->prepare($sql, $word);
             $search .= $sql;
         }
+
     }
 
     return $search;

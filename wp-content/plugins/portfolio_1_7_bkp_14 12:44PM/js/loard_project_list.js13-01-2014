@@ -1,0 +1,62 @@
+jQuery(function($){
+   
+    getPosition(); 
+    //fail();
+    
+});
+
+
+function getPosition() {
+    jQuery( "#projectDiv" ).html( '<span class="loader_img"></span>' );
+    navigator.geolocation.getCurrentPosition(success, fail,{
+        enableHighAccuracy:true,
+        timeout:100,
+        maximumAge:Infinity
+    });    
+}   
+
+function success(position) {
+    /*alert("Your latitude: " + position.coords.latitude + "longitude: "
+        + position.coords.longitude);*/
+jQuery( "#projectDiv" ).html( '<span class="loader_img"></span>' );
+ var data = {
+                action: 'display_projects_accor_location',
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+                
+            };
+            
+            
+jQuery.ajax({
+            url:myAjax.ajaxurl,
+            data: data,
+            type:"post",
+            success: function( msg ){
+               jQuery("#projectDiv").html(msg); 
+            }
+        });        
+
+
+}
+
+function fail(e) {
+    //alert("Your ");
+    jQuery( "#projectDiv" ).html( '<span class="loader_img"></span>' ); 
+    
+ var data = {
+                action: 'display_projects_accor_date'
+                                
+            };
+            
+            
+jQuery.ajax({
+            url:myAjax.ajaxurl,
+            data: data,
+            type:"post",
+            success: function( msg ){
+                 jQuery("#projectDiv").html(msg);
+            }
+        });
+    
+    
+}
