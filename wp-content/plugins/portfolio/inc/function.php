@@ -57,17 +57,6 @@ function getLocationInfoByIp(){
     return $result;
 }
 
-function ziplatlotinfo($zipcode)
-{
-    $address = $zipcode;
-    $coordinates = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($address) . '&sensor=true');
-    $coordinates = json_decode($coordinates);
-
-    $lat =  $coordinates->results[0]->geometry->location->lat;
-    $long = $coordinates->results[0]->geometry->location->lng;
-    return $lat."|".$long;
-}
-
 
 add_action( 'init', 'create_project_post_type' );
 function create_project_post_type() {
@@ -232,6 +221,7 @@ function add_js_css_for_lightbox_popup() {
     wp_enqueue_script("mfp-js", site_url() . "/wp-content/plugins/portfolio/js/jquery.magnific-popup.min.js");
     wp_enqueue_script("mfp-initjs", site_url() . "/wp-content/plugins/portfolio/js/magnifying-popup-init.js");
   }
+<<<<<<< HEAD
 }
 
 
@@ -284,3 +274,6 @@ if (!function_exists('df_disable_admin_bar')) {
     }
 }
 add_action('init','df_disable_admin_bar');
+=======
+}
+>>>>>>> parent of 249407e... upload changes

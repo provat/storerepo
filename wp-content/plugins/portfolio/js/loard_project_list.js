@@ -131,7 +131,7 @@ else{
 	jQuery("#curr_lat").val(position.coords.latitude);
 }
 
-console.log(data);
+
     
 jQuery.ajax({
             url:myAjax.ajaxurl,

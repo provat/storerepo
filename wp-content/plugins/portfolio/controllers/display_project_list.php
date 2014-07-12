@@ -43,38 +43,21 @@ Class DisplayProjects {
 
     public function display_projects_accor_location() {
       global $wpdb;
-      $post_per_page = 32;
+      $post_per_page = 16;
       $paged = ( $_REQUEST['page'] ) ? $_REQUEST['page'] : 1;
-
       $latitude=$_POST['latitude'];
       $longitude=$_POST['longitude'];
-
       $offset = ($paged - 1)*$post_per_page;
       $offset = ($offset <= 0) ? 0 : $offset;
 
 
-
       if( $latitude !='' &&  $longitude !='')
       {
-        /*$sql_query=" SELECT p.ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", p.latitude, p.longitude) as distance_from_input FROM ".$wpdb->prefix."posts p JOIN ".$wpdb->prefix."icl_translations t ON p.ID = t.element_id AND t.element_type = 'post_projects' JOIN ".$wpdb->prefix."icl_languages l ON t.language_code=l.code AND l.active=1 WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') AND t.language_code='".ICL_LANGUAGE_CODE."' ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;*/
-        //$sql_query=" SELECT ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", latitude, longitude) as distance_from_input FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;
-        // $sql_query = "SELECT p.*, (((acos(sin(($latitude*pi()/180)) * sin((`latitude`*pi()/180))+cos(($latitude*pi()/180)) * cos((`latitude`*pi()/180)) * cos((($longitude - `longitude`)*pi()/180))))*180/pi())*60*1.1515*1.609344) AS `distance` FROM ".$wpdb->prefix."posts p  WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') ORDER BY distance ASC,p.post_date DESC LIMIT ".$offset." ,".$post_per_page;
+      /*$sql_query=" SELECT p.ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", p.latitude, p.longitude) as distance_from_input FROM ".$wpdb->prefix."posts p JOIN ".$wpdb->prefix."icl_translations t ON p.ID = t.element_id AND t.element_type = 'post_projects' JOIN ".$wpdb->prefix."icl_languages l ON t.language_code=l.code AND l.active=1 WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') AND t.language_code='".ICL_LANGUAGE_CODE."' ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;*/
 
-        /* $ip = $_SERVER['HTTP_CLIENT_IP'];
-        $objlocation = getlatlang($ip);
-        $latitude = $objlocation->lat;
-        $longitude = $objlocation->lng; */
-   /*     $range = 1000;
+      //$sql_query=" SELECT ID, get_distance_in_miles_between_geo_locations(".$latitude." , ".$longitude.", latitude, longitude) as distance_from_input FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY distance_from_input ASC LIMIT ".$offset." ,".$post_per_page;
 
-        $lat_range = $range/69.172;
-        $lon_range = abs($range/(cos($latitude) * 69.172));
-
-        $min_lat = number_format($latitude - $lat_range, "4", ".", "");
-        $max_lat = number_format($latitude + $lat_range, "4", ".", "");
-        $min_lon = number_format($longitude - $lon_range, "4", ".", "");
-        $max_lon = number_format($longitude + $lon_range, "4", ".", "");*/
-
-
+<<<<<<< HEAD
 <<<<<<< HEAD
 $lon = $longitude;
 $lat = $latitude;
@@ -106,26 +89,33 @@ $distance = 20;
           $sql_query_join = " SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
         }
 
+=======
+      $sql_query = "SELECT p.*, (((acos(sin(($latitude*pi()/180)) * sin((`latitude`*pi()/180))+cos(($latitude*pi()/180)) * cos((`latitude`*pi()/180)) * cos((($longitude - `longitude`)*pi()/180))))*180/pi())*60*1.1515*1.609344) AS `distance` FROM ".$wpdb->prefix."posts p  WHERE  p.post_type = 'projects' AND (p.post_status = 'publish') ORDER BY distance ASC,p.ID DESC LIMIT ".$offset." ,".$post_per_page;
+>>>>>>> parent of 249407e... upload changes
       }
       else
       {
-        $sql_query_join = " SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY post_date DESC LIMIT ".$offset." ,".$post_per_page;
+      $sql_query=" SELECT ID, latitude, longitude FROM ".$wpdb->prefix."posts WHERE  post_type = 'projects' AND (post_status = 'publish') ORDER BY ID DESC LIMIT ".$offset." ,".$post_per_page;
       }
-      $resaults = $wpdb->get_results($sql_query_join);
+
+
+      $resaults=$wpdb->get_results($sql_query);
 
       if(count($resaults)<$post_per_page)
-         $last_page=1;
+            $last_page=1;
       else
-         $last_page=2;
+            $last_page=2;
 
       ob_start();
       foreach($resaults as $projects){
-        $GLOBALS['project']=$projects;
-        get_template_part("content", "project");
-      }
 
-      $data['sql_query'] = $sql;
-      $data['sql_query_join'] = $sql_query_join;
+
+               $GLOBALS['project']=$projects;
+
+               get_template_part("content", "project");
+
+      }
+      $data['sql_query'] = $sql_query;
       $data['content'] = ob_get_contents();
       $data['paged'] = $paged;
       $data['lpage'] = $last_page;

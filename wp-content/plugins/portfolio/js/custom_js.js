@@ -13,7 +13,7 @@ $(".trimed_content .open_read_more").click(function(){
       //$(".left_trimed_content").toggle();
     });
 
-	
+
 
   $(".group1").colorbox({rel:'group1'});
   $(".group1").colorbox({maxWidth:'95%', maxHeight:'95%'});

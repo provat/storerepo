@@ -1,6 +1,7 @@
 <?php
 global $project;
-global $distance;
+
+//var_dump($project);
 ?>
 <div class="project-cover" id="project_cover<?php echo $project->ID; ?>">
 
@@ -18,37 +19,18 @@ global $distance;
 
   <div class="cover-info-stats">
     <div class="cover-info-home">
+
       <div class="cover-name">
         <a class="projectName cover-name-link" href="<?php echo get_permalink($project->ID); ?>">
-          <?php echo get_the_title($project->ID); ?></a>&nbsp;&nbsp;<?php  if(!empty($project->distance)){ $dis = round(($project->distance * 1.609),2); if($dis<1) { $dis = $dis * 1000; echo round(($dis),2)." "."Meters"; } else { echo round(($project->distance * 1.609),2)." "."KM"; } } ?>
-
+          <?php echo get_the_title($project->ID); ?>
+        </a>
       </div>
       <?php
-      $post_date = get_post_meta($project->ID, 'project_date', true);
-      if($post_date == '') {
-        $post_date = time();
-      }
-      $is_multiple_address = get_post_meta($project->ID, 'multiple_address_status', true);
-      $country_name = get_post_meta($project->ID, 'countryName', true);
-      // get city name
-      global $wpdb;
-      $sql = "SELECT city FROM {$wpdb->prefix}project_multiple_address WHERE project_id=$project->ID";
-      $row = $wpdb->get_row($sql);
+      $post_date = get_post_field( 'post_date', $project->ID );
       ?>
-     <div class="cover-by-wrap">
-        <div class="cover-by">
-          <?php
-          if($is_multiple_address == 'Y')
-            echo 'Several cities';
-          else {
-            if($row->city != '') {
-              echo $row->city;
-            }
-          }
-          echo ','.$country_name;
-          ?>
-        </div>
-        <div class="cover-by"><?php echo date('d.m.y', $post_date);?></div>
+      <div class="cover-by-wrap">
+        <!-- <div class="cover-by">by</div> -->
+        <div class="cover-by"><?php echo date('d.m.y', strtotime($post_date));?></div>
       </div>
 
     </div>
@@ -65,7 +47,7 @@ global $distance;
     <?php if( strlen(strip_tags($output)) > 35) { ?>
   	<div class="cover-fields" style="margin-right:10px;margin-left:5px;">
   	  <div class="horizontal_scroller " id="horizontal_scroller<?php echo $project->ID; ?>" >
-  		<!--<div id="div<?php //echo $project->ID; ?>"><?php //echo $output; ?></div>-->
+  		<!--<div id="div<?php echo $project->ID; ?>"><?php echo $output; ?></div>-->
   		<div class="scrollingtext" id="scrollingtext<?php echo $project->ID; ?>" ><?php echo $output; ?></div>
   	  </div>
   	</div>
@@ -90,7 +72,7 @@ global $distance;
         </span>
         <span class="cover-stat">
         	<span class="stat-label"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/viewer.png" /></span>
-            <span class="stat-value"><?php echo ($project_viewer!='')? $project_viewer : '0'; ?></span>
+            <span class="stat-value"><?php echo ($project_viewer!='')?$project_viewer : '0'; ?></span>
         </span>
       </div>
     </div>

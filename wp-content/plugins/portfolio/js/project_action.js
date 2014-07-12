@@ -7,22 +7,6 @@ jQuery(function($){
         
      }); 
      
-     /*jQuery(".tag-content-trigger").click(function(){
-   	  var tag = jQuery(this).data("tag");
-   	  var pid = jQuery(this).data("pid");
-   	  //jQuery(".project-cover").css({'display' : 'none'});
-   	  //jQuery("#tag-"+tag).css({'display' : 'block'});
-   	  var data = {
-             action: 'get_tag_wise_projects_list',
-             tag: tag,
-             pid: pid            
-         };
-   		$.getJSON( myAjax.ajaxurl, data)
-   	    .done(function(result,statusTxt,xhr) {
-   		   $("#project_details_image_section_id").html(result.img_content);		   
-   	    });
-   	});*/
-     
      // continue project action from top toolbar
      
      $(".project_toolbar #continu_project").click(function(event){
@@ -258,8 +242,7 @@ jQuery(function($){
          event.preventDefault();
          $('#continu_project_dialog').dialog('close');
      });
-
-   
+     
      
      
      $(document).on("click", "#project_contunue_for_publish", function(event){
@@ -525,98 +508,33 @@ jQuery(function($){
      
  });   
     //crop cover image script end
-   
-        var counter;
-        stringId = '1/';
-       $(document).on("click", ".add-more", function(event){
-
-         event.preventDefault();
-            var counterSplit = $('#backupID').attr('value');
-            Totlength = counterSplit.length;
-            console.log(Totlength);
-            counter = counterSplit.charAt(Totlength-2);
-            counter++;
-            stringId = $('#backupID').attr('value');
-            stringId = stringId + counter+"/";
-
-          $(".address_dynamic:last").after($(".address_dynamic:first").clone(true));
-          $(".address_dynamic:last .address-heading").html('---------------Branch Address ------------');
-          $(".child-btn:last").append("<div class = 'remove-child' data-counter = "+counter+">Remove Branch Address</div>");  
-          $(".address_dynamic:last .project_country").attr('id','project_country'+counter);
-          $(".address_dynamic:last .project_street").attr('id','project_street'+counter);
-          $(".address_dynamic:last .project_state").attr('id','project_state'+counter);
-          $(".address_dynamic:last .project_city").attr('id','project_city'+counter);
-          $(".address_dynamic:last .project_zip").attr('id','project_zip'+counter);
-          $(".address_dynamic:last .project_country").val('');
-          $(".address_dynamic:last .project_street").val('');
-          $(".address_dynamic:last .project_state").val('');
-          $(".address_dynamic:last .project_city").val('');
-          $(".address_dynamic:last .project_zip").val('');
-
-          $('#backupID').val(stringId);
-
-
-
-          });
-       //  formation(counter);
-      
-    $(document).on("click", ".remove-child", function(event){
-         event.preventDefault();
-         if($(".address_dynamic").length!=1)
-         var selId = $(this).attr('data-counter');
-        $(this).parent().parent().remove();
-         var oldString = $('#backupID').attr('value');
-         var newString = oldString.replace(selId+"/",'');
-           // console.log("Your Concat string id is" + stringId);
-          $('#backupID').val(newString);
-     });
-
+    
  // project settings form save
- var counter_field = 1;
-
+ 
  $(document).on("click",".button_panel #project_settings_save, .button_panel #publish_project_opt_settings", function(event){
       event.preventDefault();
-      counter_field = 1;
       var pub;
       var project_id=$(".user_project_id").val();
       var project_cats=$(".projects_settings_frms #project_categories").val();
       var project_description=$(".projects_settings_frms #project_description").val();
       var project_title=$("#project_title_hidden_record").val();
-      var project_date = $(".projects_settings_frms #project_date").val();      
-      var project_country = '';
-      var project_street = '';
-      var project_state = '';
-      var project_city = '';
-      var project_zip = '';
-      var splitString = $('#backupID').attr('value');
-      splitString = splitString.toString();
-      splitString = splitString.slice(0,-1);
-      var splitArray  = splitString.split("/");
-      var splitArrayUnique = $.unique(splitArray);     /* if($(".address_dynamic").length==1)
-      {*/
+      var project_country=$(".projects_settings_frms #project_country").val();
+      var project_state=$(".projects_settings_frms #project_state").val();
+      var project_city=$(".projects_settings_frms #project_city").val();
+      var project_zip=$(".projects_settings_frms #project_zip").val();
 
-     /* }*/
-      $.each(splitArray, function(index, value) {
-
-      project_country +=$(".projects_settings_frms #project_country"+value).val()+"|";
-      project_street +=$(".projects_settings_frms #project_street"+value).val()+"|";
-      project_state +=$(".projects_settings_frms #project_state"+value).val()+"|";
-      project_city +=$(".projects_settings_frms #project_city"+value).val()+"|";
-      project_zip +=$(".projects_settings_frms #project_zip"+value).val()+"|";
-     });  
-
-      if($(".projects_settings_frms #country_all"+counter_field).attr('checked')) 
-      var country_all=$(".projects_settings_frms #country_all"+counter_field).val();
+      if($(".projects_settings_frms #country_all").attr('checked')) 
+      var country_all=$(".projects_settings_frms #country_all").val();
       else
       var country_all= '';
 
-      if($(".projects_settings_frms #state_all"+counter_field).attr('checked')) 
-      var state_all=$(".projects_settings_frms #state_all"+counter_field).val();
+      if($(".projects_settings_frms #state_all").attr('checked')) 
+      var state_all=$(".projects_settings_frms #state_all").val();
       else
       var state_all= '';
 
-      if($(".projects_settings_frms #city_all"+counter_field).attr('checked')) 
-      var city_all=$(".projects_settings_frms #city_all"+counter_field).val();
+      if($(".projects_settings_frms #city_all").attr('checked')) 
+      var city_all=$(".projects_settings_frms #city_all").val();
       else
       var city_all= '';
      
@@ -643,35 +561,31 @@ jQuery(function($){
            var loding_section=$(this).closest('div');
            $(loding_section).append('<span class="loader_img"></span>');
        }
-       var countR = $(".address_dynamic").length;
+       
       var data = {
                 action: 'save_or_publish_project',
                 referer: 'continu_project_dialog',
                 project_id: project_id,
                 project_cats: project_cats,
                 project_desc: project_description,
-                project_date: project_date,
                 project_title: project_title,
                 project_country: project_country,
-                project_street: project_street,                
                 project_state: project_state,
                 project_city: project_city,
-                project_zip: project_zip, 
-                countRows: countR,               
+                project_zip: project_zip,                
                 country_all: country_all,   
                 state_all: state_all,   
                 city_all: city_all,       
                 project_status: pub,
                 security: $('#continu_project_dialog').attr('data-security')
             };
-
+            
             
             $.ajax({
                 url:myAjax.ajaxurl,
                 data: data,
                 type:"post",
                 success: function( result3 ){
-                  console.log(data);
                     var resault = $.parseJSON(result3);
                    if(resault.status=="draft"){
                        $(".loader_img").remove();
@@ -818,5 +732,5 @@ jQuery(function($){
       });
   });
   
- 
+  
 });
