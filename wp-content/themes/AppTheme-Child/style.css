@@ -1,0 +1,13 @@
+/*
+ Theme Name:   AppTheme Child
+ Theme URI:    http://everystore.com
+ Description:  A child theme for AppPresser.
+ Author:       Everystore
+ Author URI:   Everystore
+ Template:     AppPresser
+
+*/
+
+@import url("../AppPresser/style.css");
+@import url("css/style.css");
+@import url("css/responsive.css");
